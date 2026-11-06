@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manajemen Penyewa — Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <style>
+    .page-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      min-width: 240px;
+    }
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      background: #fff;
+    }
+    .table-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .data-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #0f172a;
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      z-index: 1000; display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 10px; padding: 28px; width: 100%;
+      max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .modal-title { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 0.875rem; }
+    .detail-grid div strong { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout" id="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-text">KostManager</span>
+      <span class="logo-sub">Admin Panel</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-label">Menu Utama</span>
+        <a href="dashboard.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="rooms.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Manajemen Kamar
+        </a>
+        <a href="tenants.html" class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Manajemen Penyewa
+        </a>
+        <a href="bookings.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Booking
+        </a>
+        <a href="payments.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Pembayaran
+        </a>
+        <a href="complaints.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Keluhan
+        </a>
+        <a href="announcements.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Pengumuman
+        </a>
+        <a href="reports.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Laporan
+        </a>
+        <a href="settings.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Pengaturan
+        </a>
+        <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Keluar dari Akun
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">Manajemen Penyewa</h1>
+          <p class="page-breadcrumb">KostManager / Admin / <span>Penyewa</span></p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user" id="topbarUser"></div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div class="page-head-row">
+        <div>
+          <h2 style="font-size:1.125rem; font-weight:700; color:#0f172a; margin-bottom:4px;">Daftar Penghuni Kost & Pengguna</h2>
+          <p style="font-size:0.8125rem; color:#64748b;">Kelola data kontak penghuni, kamar yang dihuni, dan verifikasi status sewa aktif.</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary" onclick="exportTenants()" style="display:inline-flex; align-items:center; gap:6px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Data Penyewa
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="tenantSearch" class="search-input" placeholder="Cari nama, email, kamar, no HP..." oninput="filterTenants()">
+        <select id="tenantFilter" class="filter-select" onchange="filterTenants()">
+          <option value="">Semua Status Penghuni</option>
+          <option value="active">Penyewa Aktif (Menghuni)</option>
+          <option value="inactive">Calon / Non-Aktif</option>
+        </select>
+      </div>
+
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nama Penyewa</th>
+              <th>Kontak (WA/Email)</th>
+              <th>Kamar Dihuni</th>
+              <th>NIK / KTP</th>
+              <th>Status Hunian</th>
+              <th style="text-align:right;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tenantsTbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal Detail Penyewa -->
+<div class="modal-overlay" id="tenantModal">
+  <div class="modal-box">
+    <div class="modal-title">Detail Informasi Lengkap Penyewa</div>
+    <div class="detail-grid" id="tenantDetailContent">
+      <!-- Populated by JS -->
+    </div>
+    <div style="margin-top:24px; text-align:right;">
+      <button class="btn btn-secondary" onclick="closeTenantModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+  const currentUser = KostAuth.guard('admin');
+  if (currentUser) {
+    document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Administrator</div>
+      </div>
+      <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="margin-left:8px;">Keluar</button>
+    `;
+    document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Admin: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+  }
+
+  let tenantsList = [];
+
+  function loadTenants() {
+    const users = KostDB.getUsers().filter(u => u.role === 'user');
+    const bookings = KostDB.getBookings();
+
+    tenantsList = users.map(u => {
+      const activeB = bookings.find(b => b.user_id === u.id && b.status === 'approved');
+      return {
+        ...u,
+        activeBooking: activeB || null,
+        roomNumber: activeB ? activeB.room_number : null,
+        isOccupying: !!activeB
+      };
+    });
+
+    filterTenants();
+  }
+
+  function filterTenants() {
+    const q = (document.getElementById('tenantSearch').value || '').toLowerCase();
+    const st = document.getElementById('tenantFilter').value;
+
+    const filtered = tenantsList.filter(t => {
+      const matchQ = (t.name && t.name.toLowerCase().includes(q)) ||
+                     (t.email && t.email.toLowerCase().includes(q)) ||
+                     (t.phone && t.phone.toLowerCase().includes(q)) ||
+                     (t.roomNumber && t.roomNumber.toLowerCase().includes(q));
+      let matchSt = true;
+      if (st === 'active') matchSt = t.isOccupying;
+      if (st === 'inactive') matchSt = !t.isOccupying;
+      return matchQ && matchSt;
+    });
+
+    const tbody = document.getElementById('tenantsTbody');
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:32px; color:#94a3b8;">Tidak ada data penyewa ditemukan.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(t => `
+      <tr>
+        <td>
+          <div style="font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(t.name)}</div>
+          <div style="font-size:0.75rem; color:#94a3b8;">ID: ${t.id}</div>
+        </td>
+        <td>
+          <div>${t.phone || '-'}</div>
+          <div style="font-size:0.75rem; color:#64748b;">${t.email}</div>
+        </td>
+        <td>
+          ${t.roomNumber ? `<strong style="color:#1e3a5f;">Kamar ${t.roomNumber}</strong>` : `<span style="color:#94a3b8; font-size:0.8125rem;">Tidak Menghuni</span>`}
+        </td>
+        <td><span style="font-family:monospace; font-size:0.8125rem;">${t.id_number || '-'}</span></td>
+        <td>
+          ${t.isOccupying ? `<span class="badge badge-success">&#10003; Menghuni Aktif</span>` : `<span class="badge badge-secondary">Calon / Belum Aktif</span>`}
+        </td>
+        <td style="text-align:right;">
+          <button class="btn btn-xs btn-secondary" onclick="viewTenantDetail('${t.id}')">Lihat Detail</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function viewTenantDetail(id) {
+    const t = tenantsList.find(x => x.id === id);
+    if (!t) return;
+
+    document.getElementById('tenantDetailContent').innerHTML = `
+      <div><strong>Nama Lengkap</strong> ${KostUtils.escapeHtml(t.name)}</div>
+      <div><strong>ID Pengguna</strong> ${t.id}</div>
+      <div><strong>Nomor WhatsApp / HP</strong> ${t.phone || '-'}</div>
+      <div><strong>Alamat Email</strong> ${t.email}</div>
+      <div><strong>NIK / Nomor KTP</strong> ${t.id_number || '-'}</div>
+      <div><strong>Kamar Yang Dihuni</strong> ${t.roomNumber ? 'Kamar ' + t.roomNumber : 'Belum menempati kamar'}</div>
+      <div style="grid-column:span 2;"><strong>Kontak Darurat (Wali)</strong> ${t.emergency_contact || '-'}</div>
+      <div style="grid-column:span 2;"><strong>Alamat Asal KTP</strong> ${t.address || '-'}</div>
+      <div style="grid-column:span 2; border-top:1px solid #f1f5f9; padding-top:10px;">
+        <strong>Terdaftar Sejak</strong> ${KostUtils.formatDate(t.created_at)}
+      </div>
+    `;
+    document.getElementById('tenantModal').classList.add('active');
+  }
+
+  function closeTenantModal() {
+    document.getElementById('tenantModal').classList.remove('active');
+  }
+
+  function exportTenants() {
+    const headers = ['ID', 'Nama', 'Email', 'No HP', 'Kamar', 'NIK', 'Status'];
+    const rows = tenantsList.map(t => [
+      t.id,
+      t.name,
+      t.email,
+      t.phone,
+      t.roomNumber || '',
+      t.id_number || '',
+      t.isOccupying ? 'Aktif' : 'Non-Aktif'
+    ]);
+    KostUtils.exportToCSV('data_penyewa_kost.csv', [headers, ...rows]);
+  }
+
+  loadTenants();
+</script>
+</body>
+</html>
+

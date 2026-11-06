@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Status Pembayaran — KostManager Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+    }
+
+    .status-wrap {
+      max-width: 640px;
+      margin: 48px auto;
+      padding: 0 16px;
+    }
+
+    .receipt-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Status Banner */
+    .status-banner {
+      padding: 32px 24px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .status-banner.success {
+      background: #15803d;
+    }
+
+    .status-banner.failed {
+      background: #b91c1c;
+    }
+
+    .status-banner.cancelled {
+      background: #475569;
+    }
+
+    .status-banner.pending {
+      background: #b45309;
+    }
+
+    .status-icon-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .status-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .status-subtitle {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    /* Receipt Details */
+    .receipt-body {
+      padding: 28px;
+    }
+
+    .receipt-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px dashed #e2e8f0;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .brand-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+
+    .receipt-type {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .detail-label {
+      color: #64748b;
+      flex-shrink: 0;
+      width: 140px;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #0f172a;
+      text-align: right;
+    }
+
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    .breakdown-table th {
+      text-align: left;
+      font-size: 0.75rem;
+      color: #64748b;
+      text-transform: uppercase;
+      padding: 8px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .breakdown-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      color: #0f172a;
+    }
+
+    .breakdown-table .amount {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .receipt-total-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .total-title {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .total-val {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+
+    /* Stamp */
+    .stamp-wrap {
+      text-align: right;
+      margin-top: 16px;
+    }
+
+    .stamp-lunas {
+      display: inline-block;
+      padding: 4px 14px;
+      border: 2px solid #16a34a;
+      color: #16a34a;
+      font-weight: 800;
+      font-size: 0.8125rem;
+      letter-spacing: 0.1em;
+      border-radius: 4px;
+      transform: rotate(-4deg);
+    }
+
+    /* Actions Footer */
+    .receipt-actions {
+      padding: 20px 28px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary-action {
+      background: #1e3a5f;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-primary-action:hover {
+      background: #152840;
+    }
+
+    .btn-secondary-action {
+      background: #fff;
+      color: #374151;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-secondary-action:hover {
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 600px) {
+      .status-wrap {
+        margin: 16px auto;
+        padding: 0 10px;
+      }
+
+      .receipt-body {
+        padding: 18px 14px;
+      }
+
+      .receipt-actions {
+        flex-direction: column;
+        padding: 16px 14px;
+        gap: 10px;
+      }
+
+      .receipt-actions .btn-action,
+      .receipt-actions div {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .detail-row {
+        flex-direction: column;
+        gap: 2px;
+        margin-bottom: 10px;
+      }
+
+      .detail-label {
+        width: auto;
+        font-size: 0.75rem;
+      }
+
+      .detail-value {
+        text-align: left;
+      }
+    }
+
+    /* Print Stylesheet */
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .receipt-actions,
+      .status-banner {
+        display: none !important;
+      }
+
+      .status-wrap {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .receipt-card {
+        border: none;
+        box-shadow: none;
+      }
+
+      .print-only-header {
+        display: block !important;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+    }
+
+    .print-only-header {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="status-wrap">
+    <div class="receipt-card" id="printableReceipt">
+
+      <div class="print-only-header">
+        <h2 style="font-size:1.5rem; font-weight:700; color:#1e3a5f;">KOST PUTRA BAHAGIA</h2>
+        <p style="font-size:0.875rem; color:#64748b;">Jl. Kaliurang KM 5.2 No. 42, Sleman, Yogyakarta &bull; Telp:
+          0812-3456-7890</p>
+        <div style="height:2px; background:#0f172a; margin:16px 0;"></div>
+      </div>
+
+      <!-- Status Banner Dinamis -->
+      <div class="status-banner success" id="statusBanner">
+        <div class="status-icon-circle" id="statusIcon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <div class="status-title" id="statusTitle">Pembayaran Berhasil</div>
+        <div class="status-subtitle" id="statusSubtitle">Transaksi Anda telah diverifikasi oleh sistem secara otomatis.
+        </div>
+      </div>
+
+      <!-- Kwitansi / Bukti Bayar Resmi -->
+      <div class="receipt-body">
+        <div class="receipt-header-row">
+          <div>
+            <div class="brand-name">KostManager</div>
+            <div class="receipt-type">Bukti Transaksi Pembayaran Resmi</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.75rem; color:#64748b;">Tanggal Transaksi</div>
+            <div style="font-size:0.875rem; font-weight:600;" id="transDate">05 Nov 2026, 19:30</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Nomor Transaksi:</span>
+          <span class="detail-value" id="transId">TRX-2026-0001</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">ID Booking:</span>
+          <span class="detail-value" id="bkgId">BKG-001</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Nama Penyewa:</span>
+          <span class="detail-value" id="tenantName">Budi Santoso</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Kamar Kost:</span>
+          <span class="detail-value" id="roomNum">A-101 (Standard)</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Metode Pembayaran:</span>
+          <span class="detail-value" id="payMethod">QRIS (GoPay/OVO/All Bank)</span>
+        </div>
+
+        <!-- Tabel Rincian Biaya -->
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Deskripsi</th>
+              <th style="text-align:right;">Jumlah</th>
+            </tr>
+          </thead>
+          <tbody id="breakdownList">
+            <tr>
+              <td>Biaya Sewa Kamar (1 Bulan)</td>
+              <td class="amount" id="itemRent">Rp 1.500.000</td>
+            </tr>
+            <tr>
+              <td>Uang Jaminan / Deposit (Awal Masuk)</td>
+              <td class="amount" id="itemDeposit">Rp 500.000</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="receipt-total-box">
+          <span class="total-title">Total Yang Telah Dibayar</span>
+          <span class="total-val" id="totalPaid">Rp 2.000.000</span>
+        </div>
+
+        <div class="stamp-wrap" id="stampBox">
+          <span class="stamp-lunas">LUNAS</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+        <div class="receipt-actions" id="receiptActions">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+      </div>
+    </div>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const trxId = urlParams.get('trx_id');
+      const statusParam = urlParams.get('status') || 'success';
+
+      const payment = trxId ? KostDB.getPaymentById(trxId) : null;
+      const booking = payment && payment.booking_id ? KostDB.getBookingById(payment.booking_id) : null;
+      const currentUser = KostAuth.getCurrentUser();
+
+      const finalStatus = payment ? payment.status : statusParam;
+
+      function renderStatus() {
+        const banner = document.getElementById('statusBanner');
+        const icon = document.getElementById('statusIcon');
+        const title = document.getElementById('statusTitle');
+        const sub = document.getElementById('statusSubtitle');
+        const stamp = document.getElementById('stampBox');
+
+        banner.className = 'status-banner ' + finalStatus;
+
+        if (finalStatus === 'success') {
+          title.innerText = 'Pembayaran Berhasil';
+          sub.innerText = 'Transaksi Anda telah diverifikasi oleh sistem secara otomatis.';
+          icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+          stamp.innerHTML = `<span class="stamp-lunas">LUNAS</span>`;
+        } else if (finalStatus === 'failed') {
+          title.innerText = 'Pembayaran Gagal';
+          sub.innerText = 'Transaksi tidak berhasil diproses atau ditolak oleh penerbit pembayaran.';
+          icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+          stamp.innerHTML = `<span class="stamp-lunas" style="border-color:#dc2626; color:#dc2626;">GAGAL</span>`;
+        } else if (finalStatus === 'cancelled') {
+          title.innerText = 'Pembayaran Dibatalkan';
+          sub.innerText = 'Transaksi ini telah dibatalkan oleh pengguna.';
+          icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`;
+          stamp.innerHTML = `<span class="stamp-lunas" style="border-color:#64748b; color:#64748b;">BATAL</span>`;
+        }
+
+        // Populate data kwitansi
+        const dateStr = payment && payment.paid_at ? KostUtils.formatDate(payment.paid_at, true) : KostUtils.formatDate(new Date().toISOString(), true);
+        document.getElementById('transDate').innerText = dateStr;
+        document.getElementById('transId').innerText = payment ? payment.id : (trxId || 'TRX-2026-MOCK');
+        document.getElementById('bkgId').innerText = booking ? booking.id : (payment ? payment.booking_id : 'BKG-001');
+        document.getElementById('tenantName').innerText = payment ? payment.user_name : (currentUser ? currentUser.name : 'Budi Santoso');
+        document.getElementById('roomNum').innerText = payment ? 'Kamar ' + payment.room_number : 'Kamar A-101';
+        document.getElementById('payMethod').innerText = (payment ? payment.method : 'QRIS').toUpperCase();
+
+        const amt = payment ? payment.amount : 2000000;
+        const rentPart = amt > 500000 ? (amt - 500000) : amt;
+        const depPart = amt > 500000 ? 500000 : 0;
+
+        document.getElementById('itemRent').innerText = KostUtils.formatRupiah(rentPart);
+        document.getElementById('itemDeposit').innerText = KostUtils.formatRupiah(depPart);
+        document.getElementById('totalPaid').innerText = KostUtils.formatRupiah(amt);
+
+        // Dynamic Action Buttons
+        const actionsBox = document.getElementById('receiptActions');
+        const paymentId = payment ? payment.id : trxId;
+        const bookingId = booking ? booking.id : (payment ? payment.booking_id : '');
+
+        if (finalStatus === 'success') {
+          actionsBox.innerHTML = `
+        <button class="btn-action btn-secondary-action" onclick="window.print()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Cetak Bukti Bayar
+        </button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <a href="../user/lease.html" class="btn-action btn-primary-action" style="background:#15803d; text-decoration:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Lihat Masa Sewa & Kontrak
+          </a>
+          <a href="../user/dashboard.html" class="btn-action btn-primary-action" style="text-decoration:none;">
+            Ke Dashboard
+          </a>
+        </div>
+      `;
+        } else {
+          actionsBox.innerHTML = `
+        <a href="../user/bookings.html" class="btn-action btn-secondary-action" style="text-decoration:none;">
+          &larr; Kembali ke Booking Saya
+        </a>
+        <div style="display:flex; gap:8px;">
+          <a href="checkout.html?payment_id=${encodeURIComponent(paymentId || '')}&booking_id=${encodeURIComponent(bookingId || '')}" class="btn-action btn-primary-action" style="background:#2563eb; text-decoration:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            Ulangi Pembayaran
+          </a>
+        </div>
+      `;
+        }
+      }
+
+      renderStatus();
+    </script>
+</body>
+
+</html>

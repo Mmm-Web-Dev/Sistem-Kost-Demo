@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tentang — KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; }
+
+    .page-hero {
+      background: #1e3a5f;
+      height: 160px;
+      display: flex; align-items: center;
+      padding: 0 48px;
+    }
+    .page-hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; }
+    .page-hero-title { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: rgba(255,255,255,0.65); }
+    .breadcrumb a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+
+    .about-content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+
+    /* Section headers */
+    .section-label {
+      font-size: 0.75rem; font-weight: 600; color: #2563eb;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 1.5rem; font-weight: 700; color: #0f172a;
+      letter-spacing: -0.02em; margin-bottom: 24px;
+    }
+
+    /* Section 1: About */
+    .about-section { margin-bottom: 56px; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 36px;
+      align-items: flex-start;
+    }
+    .about-text p {
+      font-size: 0.9375rem; color: #374151; line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .info-card {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .info-card-header {
+      background: #1e3a5f;
+      padding: 16px 20px;
+    }
+    .info-card-header h4 { font-size: 0.9375rem; font-weight: 600; color: #fff; }
+    .info-card-body { padding: 0; }
+    .info-card-row {
+      display: flex;
+      padding: 12px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .info-card-row:last-child { border-bottom: none; }
+    .info-card-icon {
+      width: 32px; height: 32px; border-radius: 6px;
+      background: #f0f4f8; color: #1e3a5f;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-card-text {}
+    .info-card-label { font-size: 0.75rem; color: #64748b; margin-bottom: 2px; }
+    .info-card-value { font-size: 0.875rem; font-weight: 600; color: #0f172a; }
+
+    /* Section 2: Location */
+    .location-section { margin-bottom: 56px; }
+    .location-desc {
+      font-size: 0.9375rem; color: #374151; line-height: 1.75;
+      margin-bottom: 20px;
+    }
+    .map-placeholder {
+      height: 280px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      border: 1.5px solid #cbd5e1;
+      margin-bottom: 20px;
+    }
+    .map-placeholder svg { color: #94a3b8; }
+    .map-placeholder-text { font-size: 0.875rem; color: #64748b; font-weight: 500; }
+    .map-placeholder-sub { font-size: 0.8125rem; color: #94a3b8; }
+
+    .transport-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .transport-item {
+      background: #fff; border: 1.5px solid #e2e8f0; border-radius: 8px;
+      padding: 14px 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .transport-icon {
+      width: 36px; height: 36px; border-radius: 7px;
+      background: #eff6ff; color: #2563eb;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .transport-item h5 { font-size: 0.875rem; font-weight: 600; color: #0f172a; margin-bottom: 3px; }
+    .transport-item p { font-size: 0.8125rem; color: #64748b; line-height: 1.5; }
+
+    /* Section 3: Team */
+    .team-section { margin-bottom: 24px; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .team-card {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      display: flex; gap: 18px; align-items: flex-start;
+    }
+    .team-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #1e3a5f;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; font-weight: 700; color: #fff;
+      flex-shrink: 0; letter-spacing: 0.03em;
+    }
+    .team-card-info {}
+    .team-card-name { font-size: 1rem; font-weight: 600; color: #0f172a; margin-bottom: 2px; }
+    .team-card-role {
+      display: inline-flex; align-items: center;
+      background: #eff6ff; color: #2563eb;
+      border-radius: 4px; padding: 2px 10px;
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .team-card-desc { font-size: 0.8125rem; color: #64748b; line-height: 1.6; }
+
+    .divider { height: 1px; background: #e2e8f0; margin: 48px 0; }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .transport-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .page-hero { padding: 0 20px; height: 130px; }
+      .about-content { padding: 32px 16px 56px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo">
+      <div class="navbar-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="navbar-logo-text">KostManager</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="about.html" class="active">Tentang</a></li>
+      <li><a href="rooms.html">Kamar</a></li>
+      <li><a href="facilities.html">Fasilitas</a></li>
+      <li><a href="rules.html">Peraturan</a></li>
+      <li><a href="contact.html">Kontak</a></li>
+    </ul>
+    <div class="navbar-actions" id="navActions">
+      <a href="login.html" class="btn-nav-outline">Masuk</a>
+      <a href="register.html" class="btn-nav-primary">Daftar</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title">Tentang Kost Putra Bahagia</h1>
+    <div class="breadcrumb">
+      <a href="index.html">Beranda</a>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Tentang</span>
+    </div>
+  </div>
+</div>
+
+<div class="about-content">
+
+  <!-- Section 1: About -->
+  <section class="about-section">
+    <div class="section-label">Profil Kost</div>
+    <div class="section-title">Sekilas Tentang Kami</div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Kost Putra Bahagia adalah hunian kost yang berdiri sejak tahun 2021, berlokasi di kawasan strategis Jalan Kemakmuran, Kota Bandung. Kami hadir untuk memenuhi kebutuhan tempat tinggal yang nyaman, aman, dan terjangkau bagi mahasiswa, karyawan, maupun pekerja profesional yang menginginkan hunian berkualitas di Bandung.</p>
+        <p>Sejak awal beroperasi, kami telah melayani puluhan penyewa dari berbagai latar belakang. Dengan konsep pengelolaan berbasis teknologi melalui platform KostManager, kami berkomitmen untuk memberikan pengalaman tinggal yang modern — mulai dari proses booking, pembayaran digital, hingga penanganan keluhan yang cepat dan transparan.</p>
+        <p>Kost Putra Bahagia menyediakan tiga tipe kamar: Standard, Deluxe, dan Premium — masing-masing dirancang dengan fasilitas yang disesuaikan untuk berbagai kebutuhan dan anggaran. Seluruh kamar dirawat secara berkala dan dijaga kebersihannya oleh tim pengelola yang profesional.</p>
+        <p>Kepuasan dan kenyamanan penghuni adalah prioritas utama kami. Kami terus berinovasi untuk menjadikan Kost Putra Bahagia sebagai rumah kedua yang sesungguhnya bagi setiap penyewa.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-header"><h4>Informasi Kost</h4></div>
+        <div class="info-card-body">
+          <div class="info-card-row">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="info-card-text">
+              <div class="info-card-label">Nama Kost</div>
+              <div class="info-card-value">Kost Putra Bahagia</div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="info-card-text">
+              <div class="info-card-label">Alamat</div>
+              <div class="info-card-value">Jl. Kemakmuran No. 15, Kel. Sukasari, Bandung 40161</div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="info-card-text">
+              <div class="info-card-label">Tahun Berdiri</div>
+              <div class="info-card-value">2021</div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            </div>
+            <div class="info-card-text">
+              <div class="info-card-label">Total Kamar</div>
+              <div class="info-card-value">10 Kamar</div>
+            </div>
+          </div>
+          <div class="info-card-row">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="info-card-text">
+              <div class="info-card-label">Jam Operasional</div>
+              <div class="info-card-value">Senin–Sabtu, 08.00–17.00 WIB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Section 2: Location -->
+  <section class="location-section">
+    <div class="section-label">Lokasi</div>
+    <div class="section-title">Lokasi Strategis</div>
+    <p class="location-desc">Kost Putra Bahagia berlokasi di kawasan yang sangat strategis di Kota Bandung. Hanya berjarak sekitar 500 meter dari Universitas Pasundan dan 1,2 km dari Universitas Komputer Indonesia (UNIKOM). Lokasi kami juga dekat dengan akses tol Pasteur (±3 km), RSHS Bandung (±4 km), dan pusat perbelanjaan Paris Van Java (±2,5 km).</p>
+
+    <div class="map-placeholder">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div class="map-placeholder-text">Peta Lokasi</div>
+      <div class="map-placeholder-sub">Jl. Kemakmuran No. 15, Bandung 40161</div>
+    </div>
+
+    <div class="transport-grid">
+      <div class="transport-item">
+        <div class="transport-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div>
+          <h5>Angkot</h5>
+          <p>Jalur angkot Cicaheum–Ledeng melewati depan kost, mudah diakses.</p>
+        </div>
+      </div>
+      <div class="transport-item">
+        <div class="transport-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div>
+          <h5>Ojek Online</h5>
+          <p>Grab & Gojek tersedia di area ini. Rata-rata waktu tunggu 3–5 menit.</p>
+        </div>
+      </div>
+      <div class="transport-item">
+        <div class="transport-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <div>
+          <h5>Parkir Tersedia</h5>
+          <p>Area parkir motor dan mobil tersedia di dalam komplek kost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Section 3: Team -->
+  <section class="team-section">
+    <div class="section-label">Pengelola</div>
+    <div class="section-title">Tim Pengelola</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">HW</div>
+        <div class="team-card-info">
+          <div class="team-card-name">Hendra Wijaya</div>
+          <div class="team-card-role">Pemilik</div>
+          <div class="team-card-desc">Pemilik dan pengawas utama Kost Putra Bahagia. Bertanggung jawab atas kebijakan, pengembangan fasilitas, dan keputusan strategis operasional kost secara keseluruhan.</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:#2563eb;">AF</div>
+        <div class="team-card-info">
+          <div class="team-card-name">Ahmad Fauzi</div>
+          <div class="team-card-role" style="background:#eff6ff;color:#2563eb;">Admin</div>
+          <div class="team-card-desc">Manajer Operasional yang menangani proses booking, pembayaran penyewa, koordinasi pemeliharaan kamar, dan penanganan keluhan sehari-hari secara langsung.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <h4>KostManager</h4>
+      <p>Sistem manajemen kost terpadu untuk penyewa dan pengelola.</p>
+    </div>
+    <div>
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="about.html">Tentang Kost</a></li>
+        <li><a href="rooms.html">Daftar Kamar</a></li>
+        <li><a href="facilities.html">Fasilitas</a></li>
+        <li><a href="rules.html">Peraturan</a></li>
+        <li><a href="contact.html">Kontak</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <p>Jl. Kemakmuran No. 15, Bandung 40161</p>
+      <p>Telp: (022) 7812345 | WA: 0812-3456-7890</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 Kost Putra Bahagia. Semua hak dilindungi.</p>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+<script>
+  (function() {
+    const user = KostAuth.getCurrentUser();
+    if (user) {
+      document.getElementById('navActions').innerHTML = `
+        <span style="font-size:0.875rem;font-weight:600;color:#0f172a;">${user.name}</span>
+        <a href="${KostAuth.getDashboardUrl(user.role)}" class="btn-nav-primary">Dashboard</a>
+        <button onclick="KostAuth.logout(true)" class="btn-nav-outline" style="border-color:#fca5a5; color:#dc2626; cursor:pointer;" title="Keluar dari akun">Keluar</button>
+      `;
+    }
+  })();
+</script>
+</body>
+</html>

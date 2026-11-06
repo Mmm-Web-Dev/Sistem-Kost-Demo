@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Statistik Performa Kost — Pemilik Kost</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <style>
+    .stats-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .s-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .s-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 18px;
+    }
+    .metric-summary-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bar-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .bar-stat-label {
+      width: 110px;
+      font-size: 0.8125rem;
+      color: #475569;
+      flex-shrink: 0;
+    }
+    .bar-stat-track {
+      flex: 1;
+      height: 10px;
+      background: #f1f5f9;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar-stat-fill {
+      height: 100%;
+      background: #1e3a5f;
+      border-radius: 99px;
+    }
+    .bar-stat-val {
+      width: 70px;
+      text-align: right;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #0f172a;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .stats-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout" id="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-text">KostManager</span>
+      <span class="logo-sub">Owner Executive</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-label">Monitoring Bisnis</span>
+        <a href="dashboard.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Executive Dashboard
+        </a>
+        <a href="statistics.html" class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Statistik Kost
+        </a>
+        <a href="rooms.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Data Kamar & ROI
+        </a>
+        <a href="tenants.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Data Penghuni
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">Keuangan & Audit</span>
+        <a href="income.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Laporan Pendapatan
+        </a>
+        <a href="payments.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Laporan Pembayaran
+        </a>
+        <a href="occupancy.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Laporan Okupansi
+        </a>
+        <a href="activity.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Aktivitas Admin
+        </a>
+        <a href="settings.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Pengaturan Bisnis
+        </a>
+        <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Keluar dari Akun
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">Analitik & Statistik Performa</h1>
+          <p class="page-breadcrumb">KostManager / Pemilik / <span>Statistik</span></p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user" id="topbarUser"></div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div class="stats-layout">
+        <!-- Card 1: Rata-Rata Durasi Tinggal Penyewa -->
+        <div class="s-card">
+          <div class="s-card-title">Retensi & Durasi Sewa Penghuni</div>
+          <div class="metric-summary-box">
+            <div>
+              <div style="font-size:0.75rem; color:#64748b;">Rata-Rata Durasi Tinggal</div>
+              <div style="font-size:1.5rem; font-weight:700; color:#1e3a5f;">6.8 Bulan</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.75rem; color:#64748b;">Tingkat Perpanjangan Sewa</div>
+              <div style="font-size:1.5rem; font-weight:700; color:#16a34a;">85%</div>
+            </div>
+          </div>
+          <div style="font-size:0.8125rem; color:#64748b; line-height:1.6;">
+            Mayoritas penyewa adalah mahasiswa tingkat akhir dan pekerja profesional dengan rata-rata komitmen sewa minimal 6 bulan hingga 1 tahun.
+          </div>
+        </div>
+
+        <!-- Card 2: Preferensi Metode Pembayaran -->
+        <div class="s-card">
+          <div class="s-card-title">Distribusi Metode Pembayaran Digunakan</div>
+          <div class="bar-stat-row">
+            <span class="bar-stat-label">QRIS Instant</span>
+            <div class="bar-stat-track"><div class="bar-stat-fill" style="width:52%; background:#16a34a;"></div></div>
+            <span class="bar-stat-val">52%</span>
+          </div>
+          <div class="bar-stat-row">
+            <span class="bar-stat-label">Virtual Account</span>
+            <div class="bar-stat-track"><div class="bar-stat-fill" style="width:34%; background:#2563eb;"></div></div>
+            <span class="bar-stat-val">34%</span>
+          </div>
+          <div class="bar-stat-row">
+            <span class="bar-stat-label">E-Wallet Direct</span>
+            <div class="bar-stat-track"><div class="bar-stat-fill" style="width:14%; background:#d97706;"></div></div>
+            <span class="bar-stat-val">14%</span>
+          </div>
+          <div style="margin-top:14px; font-size:0.75rem; color:#64748b;">
+            100% transaksi terverifikasi tanpa perlu konfirmasi struk fisik secara manual.
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-layout">
+        <!-- Card 3: Utilisasi Fasilitas & Feedback -->
+        <div class="s-card">
+          <div class="s-card-title">Indeks Kepuasan & Layanan Perbaikan</div>
+          <div class="metric-summary-box">
+            <div>
+              <div style="font-size:0.75rem; color:#64748b;">Tingkat Penyelesaian Keluhan</div>
+              <div style="font-size:1.5rem; font-weight:700; color:#16a34a;">94.2%</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.75rem; color:#64748b;">Waktu Respon Rata-rata</div>
+              <div style="font-size:1.5rem; font-weight:700; color:#0f172a;">2.4 Jam</div>
+            </div>
+          </div>
+          <p style="font-size:0.8125rem; color:#64748b; line-height:1.5;">
+            Layanan teknisi maintenance bekerja responsif menangani keluhan sanitasi, pendingin ruangan (AC), dan stabilitas jaringan Wi-Fi.
+          </p>
+        </div>
+
+        <!-- Card 4: Potensi Pendapatan Maksimal -->
+        <div class="s-card">
+          <div class="s-card-title">Potensi Gross Rental Income (Full Capacity)</div>
+          <div class="metric-summary-box">
+            <div>
+              <div style="font-size:0.75rem; color:#64748b;">Kapasitas Maksimal (10 Kamar)</div>
+              <div style="font-size:1.5rem; font-weight:700; color:#1e3a5f;">Rp 19.600.000 / bln</div>
+            </div>
+          </div>
+          <div style="font-size:0.8125rem; color:#64748b; line-height:1.6;">
+            - 4 Unit Standard @ Rp 1.500.000 = Rp 6.000.000<br>
+            - 4 Unit Deluxe @ Rp 2.000.000 = Rp 8.000.000<br>
+            - 2 Unit Premium @ Rp 2.800.000 = Rp 5.600.000
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+  const currentUser = KostAuth.guard('owner');
+  if (currentUser) {
+    document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Pemilik Kost</div>
+      </div>
+      <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="margin-left:8px;">Keluar</button>
+    `;
+    document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Pemilik: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>
+
