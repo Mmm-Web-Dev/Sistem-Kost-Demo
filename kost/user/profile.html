@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Saya — KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="htmantps://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <style>
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .p-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .p-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .avatar-box {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .avatar-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #1e3a5f;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0 auto 12px;
+    }
+
+    @media (max-width: 900px) {
+      .profile-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-layout" id="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <a href="../index.html" style="text-decoration:none"><span class="logo-text">KostManager</span></a>
+        <span class="logo-sub">Penyewa</span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-label">Menu</span>
+          <a href="dashboard.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            Dashboard
+          </a>
+          <a href="rooms.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Cari Kamar
+          </a>
+          <a href="bookings.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Booking Saya
+          </a>
+          <a href="payments.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            Pembayaran
+          </a>
+          <a href="transactions.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            Riwayat Transaksi
+          </a>
+          <a href="lease.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+            Masa Sewa
+          </a>
+          <a href="complaints.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            Keluhan
+          </a>
+          <a href="profile.html" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Profil
+          </a>
+          <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Keluar dari Akun
+          </a>
+        </div>
+      </nav>
+      <div class="sidebar-user" id="sidebarUser"></div>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"
+            onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <div>
+            <h1 class="page-title">Profil & Pengaturan Akun</h1>
+            <p class="page-breadcrumb">KostManager / Penyewa / <span>Profil</span></p>
+            <div class="p-card" style="border-color:#fecaca;">
+              <div class="p-card-title" style="color:#dc2626;">Sesi Login</div>
+              <p style="font-size:0.8125rem; color:#64748b; margin-bottom:14px;">
+                Keluar dari sesi akun Anda pada perangkat ini. Semua data tersimpan aman.
+              </p>
+              <button type="button" class="btn" style="width:100%; background:#fee2e2; color:#dc2626; border:1px solid #fecaca; font-weight:600; padding:10px; cursor:pointer;" onclick="KostAuth.logout(true)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Keluar dari Akun (Logout)
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user" id="topbarUser"></div>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <div class="profile-layout">
+          <!-- Kolom Kiri: Informasi Pribadi & Kontak Darurat -->
+          <div>
+            <div class="p-card">
+              <div class="p-card-title">Informasi Pribadi & Kontak</div>
+              <form id="profileForm" onsubmit="handleProfileSave(event)">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="pName">Nama Lengkap *</label>
+                    <input type="text" id="pName" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="pEmail">Alamat Email</label>
+                    <input type="email" id="pEmail" class="form-control" readonly
+                      style="background:#f8fafc; color:#64748b;">
+                  </div>
+                  <div class="form-group">
+                    <label for="pPhone">Nomor WhatsApp / HP *</label>
+                    <input type="tel" id="pPhone" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="pIdNum">Nomor KTP / NIK</label>
+                    <input type="text" id="pIdNum" class="form-control" placeholder="16 digit NIK">
+                  </div>
+                  <div class="form-group" style="grid-column:span 2;">
+                    <label for="pEmergency">Kontak Darurat (Nama & No. HP Orang Tua / Wali)</label>
+                    <input type="text" id="pEmergency" class="form-control"
+                      placeholder="Contoh: Bapak Rahmat - 081287654321">
+                  </div>
+                  <div class="form-group" style="grid-column:span 2;">
+                    <label for="pAddress">Alamat Asal KTP</label>
+                    <textarea id="pAddress" class="form-control" rows="2"
+                      placeholder="Alamat domisili asal lengkap"></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary"
+                  style="padding:10px 24px; font-weight:600; margin-top:8px;">
+                  Simpan Perubahan
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Card Avatar & Ganti Password -->
+          <div>
+            <div class="p-card">
+              <div class="avatar-box">
+                <div class="avatar-circle" id="avatarInitial">B</div>
+                <div style="font-weight:700; color:#0f172a; font-size:1rem;" id="avatarNameDisplay">Budi Santoso</div>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:2px;" id="avatarEmailDisplay">budi@email.com
+                </div>
+                <div style="margin-top:12px;">
+                  <span
+                    style="font-size:0.75rem; background:#eff6ff; color:#2563eb; padding:3px 10px; border-radius:99px; font-weight:600;">Penyewa
+                    Terverifikasi</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-card">
+              <div class="p-card-title">Keamanan Password</div>
+              <form id="passwordForm" onsubmit="handlePasswordChange(event)">
+                <div class="form-group">
+                  <label for="pOldPass">Password Saat Ini *</label>
+                  <input type="password" id="pOldPass" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="pNewPass">Password Baru *</label>
+                  <input type="password" id="pNewPass" class="form-control" required minlength="6">
+                </div>
+                <div class="form-group">
+                  <label for="pConfirmPass">Konfirmasi Password Baru *</label>
+                  <input type="password" id="pConfirmPass" class="form-control" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-secondary" style="width:100%; padding:9px; font-weight:600;">
+                  Perbarui Password
+                </button>
+              </form>
+            </div>
+            <div class="p-card" style="border-color:#fecaca;">
+              <div class="p-card-title" style="color:#dc2626;">Sesi Login</div>
+              <p style="font-size:0.8125rem; color:#64748b; margin-bottom:14px;">
+                Keluar dari sesi akun Anda pada perangkat ini. Semua data tersimpan aman.
+              </p>
+              <button type="button" class="btn" style="width:100%; background:#fee2e2; color:#dc2626; border:1px solid #fecaca; font-weight:600; padding:10px; cursor:pointer;" onclick="KostAuth.logout(true)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Keluar dari Akun (Logout)
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/utils.js"></script>
+  <script>
+    let currentUser = KostAuth.guard('user');
+    if (currentUser) {
+      document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Penyewa</div>
+      </div>
+      <button onclick="KostAuth.logout()" class="btn btn-xs btn-secondary" style="margin-left:8px;">Keluar</button>
+    `;
+      document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Login sebagai: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+    }
+
+    function loadProfile() {
+      document.getElementById('pName').value = currentUser.name || '';
+      document.getElementById('pEmail').value = currentUser.email || '';
+      document.getElementById('pPhone').value = currentUser.phone || '';
+      document.getElementById('pIdNum').value = currentUser.id_number || '';
+      document.getElementById('pEmergency').value = currentUser.emergency_contact || '';
+      document.getElementById('pAddress').value = currentUser.address || '';
+
+      document.getElementById('avatarInitial').innerText = (currentUser.name || 'U').charAt(0).toUpperCase();
+      document.getElementById('avatarNameDisplay').innerText = currentUser.name || '';
+      document.getElementById('avatarEmailDisplay').innerText = currentUser.email || '';
+    }
+
+    function handleProfileSave(e) {
+      e.preventDefault();
+      const updated = {
+        name: document.getElementById('pName').value.trim(),
+        phone: document.getElementById('pPhone').value.trim(),
+        id_number: document.getElementById('pIdNum').value.trim(),
+        emergency_contact: document.getElementById('pEmergency').value.trim(),
+        address: document.getElementById('pAddress').value.trim()
+      };
+
+      const res = KostDB.updateUser(currentUser.id, updated);
+      if (res) {
+        currentUser = res;
+        localStorage.setItem('kost_current_user', JSON.stringify(res));
+        KostDB.addLog(currentUser.id, currentUser.name, 'Perbarui Profil', 'Penyewa memperbarui informasi profil akun');
+        KostUtils.showToast('Profil Anda berhasil diperbarui!', 'success');
+        loadProfile();
+      }
+    }
+
+    function handlePasswordChange(e) {
+      e.preventDefault();
+      const oldP = document.getElementById('pOldPass').value;
+      const newP = document.getElementById('pNewPass').value;
+      const confP = document.getElementById('pConfirmPass').value;
+
+      if (oldP !== currentUser.password) {
+        KostUtils.showToast('Password saat ini salah!', 'danger');
+        return;
+      }
+      if (newP !== confP) {
+        KostUtils.showToast('Konfirmasi password baru tidak cocok!', 'danger');
+        return;
+      }
+
+      const res = KostDB.updateUser(currentUser.id, { password: newP });
+      if (res) {
+        currentUser = res;
+        localStorage.setItem('kost_current_user', JSON.stringify(res));
+        KostDB.addLog(currentUser.id, currentUser.name, 'Ganti Password', 'Penyewa mengubah kata sandi akun');
+        KostUtils.showToast('Password berhasil diganti!', 'success');
+        document.getElementById('passwordForm').reset();
+      }
+    }
+
+    loadProfile();
+  </script>
+</body>
+
+</html>

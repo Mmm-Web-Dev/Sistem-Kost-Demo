@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Admin KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <style>
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 1.5rem; }
+    .stat-label { font-size: 0.8rem; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.5rem; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: #0f172a; line-height: 1; }
+    .stat-sub { font-size: 0.78rem; color: #64748b; margin-top: 0.4rem; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
+    .two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 1.25rem; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .card-title { font-size: 0.95rem; font-weight: 600; color: #0f172a; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .data-table th { text-align: left; padding: 0.6rem 0.75rem; font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e2e8f0; }
+    .data-table td { padding: 0.75rem; border-bottom: 1px solid #f1f5f9; color: #0f172a; vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .btn-xs { padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; }
+    .btn-success-xs { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .btn-success-xs:hover { background: #dcfce7; }
+    .btn-danger-xs { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .btn-danger-xs:hover { background: #fee2e2; }
+    .btn-info-xs { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+    .btn-info-xs:hover { background: #dbeafe; }
+    .payment-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .payment-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: #f8fafc; border-radius: 8px; }
+    .payment-info { flex: 1; }
+    .payment-name { font-size: 0.85rem; font-weight: 600; color: #0f172a; }
+    .payment-desc { font-size: 0.75rem; color: #64748b; }
+    .payment-amount { font-size: 0.85rem; font-weight: 700; color: #0f172a; text-align: right; }
+    .bar-chart-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.9rem; }
+    .bar-label { font-size: 0.8rem; color: #64748b; width: 90px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 10px; background: #f1f5f9; border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+    .bar-count { font-size: 0.8rem; font-weight: 600; color: #0f172a; width: 50px; text-align: right; flex-shrink: 0; }
+    .complaint-item { padding: 0.75rem; border: 1px solid #f1f5f9; border-radius: 8px; margin-bottom: 0.6rem; }
+    .complaint-item:last-child { margin-bottom: 0; }
+    .complaint-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem; }
+    .complaint-title { font-size: 0.85rem; font-weight: 600; color: #0f172a; }
+    .complaint-meta { font-size: 0.75rem; color: #64748b; }
+    @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .two-col { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout" id="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-text">KostManager</span>
+      <span class="logo-sub">Admin Panel</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-label">Menu Utama</span>
+        <a href="dashboard.html" class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="rooms.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Manajemen Kamar
+        </a>
+        <a href="tenants.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Manajemen Penyewa
+        </a>
+        <a href="bookings.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Booking
+        </a>
+        <a href="payments.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Pembayaran
+        </a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-section-label">Operasional</span>
+        <a href="complaints.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Keluhan
+        </a>
+        <a href="announcements.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          Pengumuman
+        </a>
+        <a href="reports.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Laporan
+        </a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-section-label">Sistem</span>
+        <a href="settings.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Pengaturan
+        </a>
+        <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Keluar dari Akun
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')" aria-label="Toggle sidebar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-breadcrumb">KostManager / Admin / Dashboard</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="notif-wrapper" style="position:relative">
+          <button class="topbar-icon-btn" onclick="toggleNotifPanel()" aria-label="Notifikasi">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge" id="notif-badge" style="display:none"></span>
+          </button>
+          <div class="notif-panel" id="notifPanel" style="display:none"></div>
+        </div>
+        <div id="topbarUser"></div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <!-- Stats -->
+      <div class="stats-grid" id="statsGrid"></div>
+
+      <!-- Two Column -->
+      <div class="two-col">
+        <div>
+          <!-- Recent Bookings -->
+          <div class="card" style="margin-bottom:1.25rem">
+            <div class="card-header">
+              <span class="card-title">Booking Terbaru</span>
+              <a href="bookings.html" style="font-size:0.8rem;color:#2563eb;text-decoration:none;font-weight:500;">Lihat Semua</a>
+            </div>
+            <div id="bookingTableWrap">
+              <table class="data-table" id="bookingTable">
+                <thead><tr><th>No. Booking</th><th>Penyewa</th><th>Kamar</th><th>Tgl Masuk</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="bookingTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Recent Payments -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Pembayaran Terbaru</span>
+              <a href="payments.html" style="font-size:0.8rem;color:#2563eb;text-decoration:none;font-weight:500;">Lihat Semua</a>
+            </div>
+            <div class="payment-list" id="paymentList"></div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Room Status Chart -->
+          <div class="card" style="margin-bottom:1.25rem">
+            <div class="card-header">
+              <span class="card-title">Status Kamar</span>
+            </div>
+            <div id="roomChart"></div>
+          </div>
+
+          <!-- Recent Complaints -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Keluhan Terbaru</span>
+              <a href="complaints.html" style="font-size:0.8rem;color:#2563eb;text-decoration:none;font-weight:500;">Lihat Semua</a>
+            </div>
+            <div id="complaintList"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+const currentUser = KostAuth.requireAuth('admin');
+if (!currentUser) throw new Error('Not authenticated');
+
+// Sidebar user
+document.getElementById('sidebarUser').innerHTML = `
+  <div style="display:flex;align-items:center;gap:0.6rem;padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.1);">
+    <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#fff;flex-shrink:0;">${currentUser.name.charAt(0)}</div>
+    <div style="overflow:hidden;flex:1;">
+      <div style="font-size:0.82rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${KostUtils.escapeHtml(currentUser.name)}</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Administrator</div>
+    </div>
+  </div>`;
+
+// Topbar user
+document.getElementById('topbarUser').innerHTML = `
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.75rem;border-radius:8px;border:1px solid #e2e8f0;background:#fff;">
+      <div style="width:30px;height:30px;border-radius:50%;background:#1e3a5f;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#fff;">${currentUser.name.charAt(0)}</div>
+      <span style="font-size:0.85rem;font-weight:500;color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</span>
+    </div>
+    <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="border-color:#fca5a5; color:#dc2626; cursor:pointer;" title="Keluar dari akun">Keluar</button>
+  </div>`;
+
+// Notifications
+KostUtils.updateNotificationBadge();
+function toggleNotifPanel() {
+  const panel = document.getElementById('notifPanel');
+  if (panel.style.display === 'none') {
+    const notifs = KostDB.getNotificationsByUserId(currentUser.id).slice(0, 6);
+    panel.innerHTML = `<div style="padding:0.75rem 1rem;border-bottom:1px solid #e2e8f0;font-weight:600;font-size:0.85rem;color:#0f172a;">Notifikasi</div>` +
+      (notifs.length === 0 ? '<div style="padding:1rem;font-size:0.85rem;color:#64748b;text-align:center;">Tidak ada notifikasi</div>' :
+        notifs.map(n => `<div style="padding:0.75rem 1rem;border-bottom:1px solid #f1f5f9;cursor:pointer;background:${n.is_read?'#fff':'#eff6ff'}" onclick="KostDB.markNotificationRead('${n.id}');toggleNotifPanel();toggleNotifPanel();">
+          <div style="font-size:0.82rem;font-weight:600;color:#0f172a;">${KostUtils.escapeHtml(n.title)}</div>
+          <div style="font-size:0.76rem;color:#64748b;margin-top:2px;">${KostUtils.escapeHtml(n.message)}</div>
+          <div style="font-size:0.72rem;color:#94a3b8;margin-top:3px;">${KostUtils.timeAgo(n.created_at)}</div>
+        </div>`).join(''));
+    panel.style.display = 'block';
+    setTimeout(() => document.addEventListener('click', closeNotif, {once:true}), 10);
+  } else { panel.style.display = 'none'; }
+}
+function closeNotif(e) {
+  if (!document.getElementById('notifPanel').contains(e.target)) document.getElementById('notifPanel').style.display = 'none';
+}
+
+// --- Stats ---
+function renderStats() {
+  const rooms = KostDB.getRooms();
+  const bookings = KostDB.getBookings();
+  const payments = KostDB.getPayments();
+  const now = new Date();
+  const thisMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+
+  const totalRooms = rooms.length;
+  const availableRooms = rooms.filter(r => r.status === 'available').length;
+  const occupiedRooms = rooms.filter(r => r.status === 'occupied').length;
+  const activeTenants = bookings.filter(b => b.status === 'active').length;
+  const pendingBookings = bookings.filter(b => b.status === 'pending').length;
+  const monthlyIncome = payments.filter(p => p.status === 'success' && (p.paid_at || p.created_at || '').startsWith(thisMonth)).reduce((s,p) => s + (p.amount||0), 0);
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#eff6ff;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="stat-label">Total Kamar</div>
+      <div class="stat-value">${totalRooms}</div>
+      <div class="stat-sub">${availableRooms} tersedia &bull; ${occupiedRooms} terisi</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#f0fdf4;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="stat-label">Penyewa Aktif</div>
+      <div class="stat-value">${activeTenants}</div>
+      <div class="stat-sub">Booking dengan status aktif</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fffbeb;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="stat-label">Pemasukan Bulan Ini</div>
+      <div class="stat-value" style="font-size:1.3rem;">${KostUtils.formatCurrency(monthlyIncome)}</div>
+      <div class="stat-sub">Pembayaran lunas bulan ini</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fef2f2;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="stat-label">Booking Menunggu</div>
+      <div class="stat-value">${pendingBookings}</div>
+      <div class="stat-sub">Perlu persetujuan admin</div>
+    </div>`;
+}
+
+// --- Booking Table ---
+function renderBookingTable() {
+  const bookings = KostDB.getBookings()
+    .filter(b => ['pending','approved','active'].includes(b.status))
+    .sort((a,b) => new Date(b.created_at)-new Date(a.created_at))
+    .slice(0,5);
+
+  const tbody = document.getElementById('bookingTbody');
+  if (bookings.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#64748b;padding:2rem;">Tidak ada booking terbaru</td></tr>';
+    return;
+  }
+  tbody.innerHTML = bookings.map(b => `
+    <tr>
+      <td style="font-family:monospace;font-size:0.8rem;">${b.id}</td>
+      <td style="font-weight:500;">${KostUtils.escapeHtml(b.user_name)}</td>
+      <td><span style="font-weight:600;color:#1e3a5f;">${b.room_number}</span></td>
+      <td>${KostUtils.formatDate(b.start_date)}</td>
+      <td>${KostUtils.getStatusBadge(b.status,'booking')}</td>
+      <td>
+        ${b.status === 'pending' ? `
+          <button class="btn-xs btn-success-xs" onclick="approveBooking('${b.id}')">Setujui</button>
+          <button class="btn-xs btn-danger-xs" onclick="rejectBooking('${b.id}')" style="margin-left:4px;">Tolak</button>
+        ` : `<button class="btn-xs btn-info-xs" onclick="window.location.href='bookings.html'">Detail</button>`}
+      </td>
+    </tr>`).join('');
+}
+
+function approveBooking(id) {
+  KostUtils.confirm('Setujui booking ini? Penyewa akan mendapat notifikasi untuk melakukan pembayaran.', () => {
+    const booking = KostDB.getBookingById(id);
+    if (!booking) return;
+    KostDB.updateBooking(id, {status:'approved'});
+    KostDB.updateRoom(booking.room_id, {status:'reserved'});
+    KostDB.createNotification({user_id: booking.user_id, title:'Booking Disetujui', message:'Booking Anda telah disetujui. Silakan lakukan pembayaran.', type:'booking', link:'/user/payments.html'});
+    KostDB.addLog(currentUser.id, currentUser.name, 'Setujui Booking', `Booking ${id} disetujui`);
+    KostUtils.showToast('Booking berhasil disetujui', 'success');
+    renderBookingTable();
+    renderStats();
+  }, null, 'Setujui Booking');
+}
+
+function rejectBooking(id) {
+  KostUtils.confirm('Tolak booking ini? Status akan diubah menjadi dibatalkan.', () => {
+    const booking = KostDB.getBookingById(id);
+    if (!booking) return;
+    KostDB.updateBooking(id, {status:'cancelled'});
+    KostDB.updateRoom(booking.room_id, {status:'available'});
+    KostDB.createNotification({user_id: booking.user_id, title:'Booking Ditolak', message:'Mohon maaf, booking Anda tidak dapat disetujui. Silakan hubungi admin untuk informasi lebih lanjut.', type:'booking', link:'/user/bookings.html'});
+    KostDB.addLog(currentUser.id, currentUser.name, 'Tolak Booking', `Booking ${id} ditolak/dibatalkan`);
+    KostUtils.showToast('Booking telah ditolak', 'warning');
+    renderBookingTable();
+    renderStats();
+  }, null, 'Tolak Booking');
+}
+
+// --- Payment List ---
+function renderPaymentList() {
+  const payments = KostDB.getPayments()
+    .sort((a,b) => new Date(b.created_at)-new Date(a.created_at))
+    .slice(0,5);
+  const methodLabel = {virtual_account:'Virtual Account', transfer:'Transfer Bank', qris:'QRIS', ewallet:'E-Wallet', tunai:'Tunai'};
+  document.getElementById('paymentList').innerHTML = payments.map(p => {
+    const user = KostDB.getUserById(p.user_id);
+    return `<div class="payment-item">
+      <div class="payment-info">
+        <div class="payment-name">${KostUtils.escapeHtml(user ? user.name : '-')}</div>
+        <div class="payment-desc">${KostUtils.escapeHtml(p.invoice_number||p.id)} &bull; ${methodLabel[p.method]||p.method}</div>
+      </div>
+      <div>
+        <div class="payment-amount">${KostUtils.formatCurrency(p.amount)}</div>
+        <div style="text-align:right;margin-top:3px;">${KostUtils.getStatusBadge(p.status,'payment')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// --- Room Chart ---
+function renderRoomChart() {
+  const rooms = KostDB.getRooms();
+  const total = rooms.length || 1;
+  const statuses = [
+    {key:'available', label:'Tersedia', color:'#16a34a'},
+    {key:'occupied',  label:'Terisi',   color:'#1e3a5f'},
+    {key:'reserved',  label:'Dipesan',  color:'#d97706'},
+    {key:'maintenance',label:'Renovasi',color:'#dc2626'}
+  ];
+  document.getElementById('roomChart').innerHTML = statuses.map(s => {
+    const count = rooms.filter(r => r.status === s.key).length;
+    const pct = Math.round((count/total)*100);
+    return `<div class="bar-chart-row">
+      <div class="bar-label">${s.label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${s.color};"></div></div>
+      <div class="bar-count">${count} <span style="font-weight:400;color:#94a3b8;">(${pct}%)</span></div>
+    </div>`;
+  }).join('') + `<div style="margin-top:0.75rem;font-size:0.78rem;color:#64748b;">Total: ${rooms.length} kamar</div>`;
+}
+
+// --- Complaints ---
+function renderComplaints() {
+  const complaints = KostDB.getComplaints()
+    .sort((a,b) => new Date(b.created_at)-new Date(a.created_at))
+    .slice(0,3);
+  document.getElementById('complaintList').innerHTML = complaints.map(c => `
+    <div class="complaint-item">
+      <div class="complaint-top">
+        <span class="complaint-title">${KostUtils.escapeHtml(c.title)}</span>
+        ${KostUtils.getStatusBadge(c.status,'complaint')}
+      </div>
+      <div class="complaint-meta">${KostUtils.escapeHtml(c.user_name)} &bull; Kamar ${c.room_number} &bull; ${KostUtils.formatDate(c.created_at)}</div>
+      ${c.status === 'open' ? `<button class="btn-xs btn-info-xs" style="margin-top:0.5rem;" onclick="processComplaint('${c.id}')">Proses</button>` : ''}
+    </div>`).join('') || '<div style="color:#64748b;font-size:0.85rem;text-align:center;padding:1rem;">Tidak ada keluhan</div>';
+}
+
+function processComplaint(id) {
+  KostDB.updateComplaint(id, {status:'in_progress', admin_response: 'Sedang dalam penanganan.'});
+  KostDB.addLog(currentUser.id, currentUser.name, 'Proses Keluhan', `Keluhan ${id} mulai diproses`);
+  KostUtils.showToast('Keluhan sedang diproses', 'info');
+  renderComplaints();
+}
+
+// Init
+renderStats();
+renderBookingTable();
+renderPaymentList();
+renderRoomChart();
+renderComplaints();
+</script>
+</body>
+</html>

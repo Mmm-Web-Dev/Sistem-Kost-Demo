@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Masa Sewa & Kontrak — KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <style>
+    .lease-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .lease-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .lease-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lease-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #dcfce7;
+      color: #15803d;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .info-box label {
+      display: block;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .info-box span {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .progress-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .progress-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      background: #e2e8f0;
+      height: 10px;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #2563eb;
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    .contract-clause {
+      font-size: 0.8125rem;
+      color: #475569;
+      line-height: 1.6;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .extend-form-group {
+      margin-bottom: 16px;
+    }
+
+    .extend-form-group label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .extend-form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      background: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .lease-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-layout" id="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <a href="../index.html" style="text-decoration:none"><span class="logo-text">KostManager</span></a>
+        <span class="logo-sub">Penyewa</span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-label">Menu</span>
+          <a href="dashboard.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            Dashboard
+          </a>
+          <a href="rooms.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Cari Kamar
+          </a>
+          <a href="bookings.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Booking Saya
+          </a>
+          <a href="payments.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            Pembayaran
+          </a>
+          <a href="transactions.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            Riwayat Transaksi
+          </a>
+          <a href="lease.html" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+            Masa Sewa
+          </a>
+          <a href="complaints.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            Keluhan
+          </a>
+          <a href="profile.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Profil
+          </a>
+          <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Keluar dari Akun
+          </a>
+        </div>
+      </nav>
+      <div class="sidebar-user" id="sidebarUser"></div>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle"
+            onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <div>
+            <h1 class="page-title">Masa Sewa & Kontrak</h1>
+            <p class="page-breadcrumb">KostManager / Penyewa / <span>Masa Sewa</span></p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-user" id="topbarUser"></div>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <div class="lease-grid">
+          <!-- Kolom Kiri: Status Sewa & Perjanjian -->
+          <div>
+            <div class="lease-card" id="activeLeaseCard">
+              <!-- Populated by JS -->
+            </div>
+
+            <div class="lease-card">
+              <div class="lease-title">Ketentuan & Perjanjian Kontrak Sewa</div>
+              <div class="contract-clause">
+                <strong>SURAT PERJANJIAN SEWA MENYEWA KAMAR KOST</strong><br><br>
+                <strong>Pasal 1: Hak & Kewajiban Penyewa</strong><br>
+                1. Penyewa berhak menempati kamar yang telah disewa beserta seluruh fasilitas yang tercantum dalam
+                berita acara serah terima.<br>
+                2. Penyewa wajib menjaga kebersihan, ketertiban, dan keutuhan fasilitas kost serta tidak merusak
+                inventaris kamar.<br>
+                3. Penyewa bertanggung jawab atas segala bentuk kerusakan yang diakibatkan oleh kelalaian
+                pribadi.<br><br>
+                <strong>Pasal 2: Uang Jaminan (Deposit)</strong><br>
+                1. Uang jaminan (deposit) sebesar Rp 500.000 disimpan oleh pihak pengelola selama masa sewa
+                berlangsung.<br>
+                2. Deposit akan dikembalikan secara penuh saat masa kontrak selesai setelah dipotong biaya perbaikan
+                kerusakan (jika ada).<br><br>
+                <strong>Pasal 3: Perpanjangan & Pengakhiran</strong><br>
+                1. Pengajuan perpanjangan wajib disampaikan paling lambat 7 hari sebelum berakhirnya masa sewa
+                aktif.<br>
+                2. Keterlambatan pelaporan pengosongan kamar dapat dikenakan denda sewa proporsional harian.
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Pengajuan Perpanjangan Sewa -->
+          <div>
+            <div class="lease-card">
+              <div class="lease-title">Ajukan Perpanjangan Sewa</div>
+              <p style="font-size:0.8125rem; color:#64748b; margin-bottom:16px;">
+                Perpanjang masa tinggal Anda tanpa perlu mendaftar ulang. Tagihan perpanjangan akan otomatis
+                diterbitkan.
+              </p>
+
+              <form id="extendForm" onsubmit="handleExtendSubmit(event)">
+                <div class="extend-form-group">
+                  <label>Kamar Yang Disewa</label>
+                  <input type="text" id="extendRoomDisplay" class="extend-form-control" readonly
+                    style="background:#f8fafc;" value="Kamar A-101">
+                </div>
+
+                <div class="extend-form-group">
+                  <label>Pilihan Periode Perpanjangan</label>
+                  <select id="extendDuration" class="extend-form-control" onchange="calculateExtendCost()">
+                    <option value="1">1 Bulan</option>
+                    <option value="3">3 Bulan (Diskon 5%)</option>
+                    <option value="6">6 Bulan (Diskon 8%)</option>
+                    <option value="12">1 Tahun (Diskon 10%)</option>
+                  </select>
+                </div>
+
+                <div class="extend-form-group">
+                  <label>Estimasi Biaya Perpanjangan</label>
+                  <div style="font-size:1.25rem; font-weight:700; color:#1e3a5f;" id="extendCostDisplay">Rp 1.500.000
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%; padding:10px; font-weight:600;">
+                  Kirim Pengajuan Perpanjangan
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/utils.js"></script>
+  <script>
+    const currentUser = KostAuth.guard('user');
+    if (currentUser) {
+      document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Penyewa</div>
+      </div>
+      <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="margin-left:8px;">Keluar</button>
+    `;
+      document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Login sebagai: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+    }
+
+    let activeBooking = null;
+    let activeRoom = null;
+
+    function loadLease() {
+      const bookings = KostDB.getBookingsByUserId(currentUser.id);
+      const rooms = KostDB.getRooms();
+
+      // Cari booking yang approved / active (prioritaskan yang terbaru)
+      const myBookings = [...bookings].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      activeBooking = myBookings.find(b => b.status === 'approved' || b.status === 'active') || myBookings[0];
+      activeRoom = rooms.find(r => r.id === (activeBooking ? activeBooking.room_id : 'room-001')) || rooms[0];
+
+      const card = document.getElementById('activeLeaseCard');
+
+      if (!activeBooking) {
+        card.innerHTML = `
+        <div style="text-align:center; padding:32px 16px; color:#94a3b8;">
+          <div style="font-size:1rem; font-weight:600; color:#0f172a; margin-bottom:6px;">Tidak Ada Kontrak Sewa Aktif</div>
+          <p style="font-size:0.875rem; color:#64748b; margin-bottom:16px;">Anda saat ini belum memiliki masa sewa aktif. Silakan pilih dan booking kamar terlebih dahulu.</p>
+          <a href="rooms.html" class="btn btn-primary" style="text-decoration:none;">Cari Kamar</a>
+        </div>
+      `;
+        return;
+      }
+
+      const startDate = new Date(activeBooking.start_date || '2026-01-01');
+      const endDate = new Date(activeBooking.end_date || '2026-12-31');
+      const now = new Date();
+
+      const totalDays = Math.max(1, Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)));
+      const elapsedDays = Math.max(0, Math.round((now - startDate) / (1000 * 60 * 60 * 24)));
+      const remainingDays = Math.max(0, Math.round((endDate - now) / (1000 * 60 * 60 * 24)));
+      const pct = Math.min(100, Math.round((elapsedDays / totalDays) * 100));
+
+      card.innerHTML = `
+      <div class="lease-title">
+        <span>Informasi Sewa Aktif</span>
+        <span class="lease-status-badge">&#10003; Kontrak Aktif</span>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <label>Nomor Kamar</label>
+          <span>Kamar ${activeRoom.number} (${activeRoom.type})</span>
+        </div>
+        <div class="info-box">
+          <label>Lantai & Luas</label>
+          <span>Lantai ${activeRoom.floor} &bull; ${activeRoom.size}</span>
+        </div>
+        <div class="info-box">
+          <label>Harga Sewa Bulanan</label>
+          <span>${KostUtils.formatRupiah(activeRoom.price)}</span>
+        </div>
+        <div class="info-box">
+          <label>Tanggal Mulai Sewa</label>
+          <span>${KostUtils.formatDate(activeBooking.start_date)}</span>
+        </div>
+        <div class="info-box">
+          <label>Tanggal Berakhir Sewa</label>
+          <span>${KostUtils.formatDate(activeBooking.end_date)}</span>
+        </div>
+        <div class="info-box">
+          <label>Deposit Jaminan</label>
+          <span style="color:#16a34a;">Rp 500.000 (Tersimpan)</span>
+        </div>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress-head">
+          <span>Periode Sewa Berjalan</span>
+          <span><strong>${remainingDays} Hari</strong> Tersisa</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+        </div>
+      </div>
+    `;
+
+      document.getElementById('extendRoomDisplay').value = `Kamar ${activeRoom.number} (${activeRoom.type})`;
+      calculateExtendCost();
+    }
+
+    function calculateExtendCost() {
+      const dur = parseInt(document.getElementById('extendDuration').value) || 1;
+      const pricePerMonth = activeRoom ? activeRoom.price : 1500000;
+      let disc = 0;
+      if (dur === 3) disc = 0.05;
+      if (dur === 6) disc = 0.08;
+      if (dur === 12) disc = 0.10;
+
+      const total = Math.round(pricePerMonth * dur * (1 - disc));
+      document.getElementById('extendCostDisplay').innerText = KostUtils.formatRupiah(total);
+    }
+
+    function handleExtendSubmit(e) {
+      e.preventDefault();
+      const dur = parseInt(document.getElementById('extendDuration').value) || 1;
+      const costText = document.getElementById('extendCostDisplay').innerText;
+      const costNum = parseInt(costText.replace(/[^0-9]/g, '')) || 1500000;
+
+      KostUtils.confirm(`Ajukan perpanjangan sewa selama ${dur} bulan sebesar ${costText}? Tagihan baru akan otomatis dibuat.`, 'Konfirmasi Perpanjangan', () => {
+        // Buat invoice payment baru untuk perpanjangan
+        const payment = KostDB.createPayment({
+          booking_id: activeBooking ? activeBooking.id : 'BKG-EXTEND',
+          user_id: currentUser.id,
+          user_name: currentUser.name,
+          room_number: activeRoom.number,
+          amount: costNum,
+          method: 'va',
+          status: 'pending',
+          type: 'rent'
+        });
+
+        KostDB.addLog(currentUser.id, currentUser.name, 'Pengajuan Perpanjangan', `Pengajuan perpanjangan sewa kamar ${activeRoom.number} selama ${dur} bulan`);
+
+        KostDB.createNotification({
+          user_id: currentUser.id,
+          title: 'Tagihan Perpanjangan Diterbitkan',
+          message: `Tagihan perpanjangan sewa kamar ${activeRoom.number} sebesar ${KostUtils.formatRupiah(costNum)} telah siap dibayar.`,
+          type: 'payment'
+        });
+
+        KostUtils.showToast('Pengajuan perpanjangan berhasil dibuat! Silakan lakukan pembayaran.', 'success');
+        setTimeout(() => {
+          window.location.href = `../payment/checkout.html?payment_id=${payment.id}`;
+        }, 1200);
+      });
+    }
+
+    loadLease();
+  </script>
+</body>
+
+</html>

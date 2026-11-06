@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Kamar — KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <style>
+    .room-detail-container {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .room-banner {
+      height: 220px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .room-banner.type-standard {
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    }
+
+    .room-banner.type-deluxe {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+    }
+
+    .room-banner.type-premium {
+      background: linear-gradient(135deg, #6d28d9, #a78bfa);
+    }
+
+    .room-banner-num {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .room-banner-type {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      opacity: 0.85;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .detail-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .detail-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .info-table tr {
+      border-bottom: 1px solid #f8fafc;
+    }
+
+    .info-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .info-table td {
+      padding: 10px 0;
+      font-size: 0.875rem;
+    }
+
+    .info-table td:first-child {
+      color: #64748b;
+      width: 150px;
+      font-weight: 500;
+    }
+
+    .info-table td:last-child {
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .facilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .fac-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    .fac-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+      flex-shrink: 0;
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.8125rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .rules-list svg {
+      color: #2563eb;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Booking Sticky Card */
+    .booking-sidebar-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      position: sticky;
+      top: 80px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .price-main {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2563eb;
+      line-height: 1.2;
+    }
+
+    .price-sub {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .duration-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .duration-tab {
+      padding: 8px 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #374151;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .duration-tab.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .breakdown-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .breakdown-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-top: 8px;
+      border-top: 1px dashed #cbd5e1;
+      margin-top: 6px;
+    }
+
+    .btn-booking-now {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #fff;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-booking-now:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-booking-now:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .btn-wa-contact {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #16a34a;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-wa-contact:hover {
+      background: #dcfce7;
+    }
+
+    @media (max-width: 900px) {
+      .room-detail-container {
+        grid-template-columns: 1fr;
+      }
+
+      .booking-sidebar-card {
+        position: static;
+      }
+
+      .facilities-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .facilities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .duration-tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-layout" id="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <a href="../index.html" style="text-decoration:none"><span class="logo-text">KostManager</span></a>
+        <span class="logo-sub">Penyewa</span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-label">Menu</span>
+          <a href="dashboard.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            Dashboard
+          </a>
+          <a href="rooms.html" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Cari Kamar
+          </a>
+          <a href="bookings.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Booking Saya
+          </a>
+          <a href="payments.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            Pembayaran
+          </a>
+          <a href="transactions.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            Riwayat Transaksi
+          </a>
+          <a href="lease.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+            Masa Sewa
+          </a>
+          <a href="complaints.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            Keluhan
+          </a>
+          <a href="profile.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Profil
+          </a>
+          <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Keluar dari Akun
+          </a>
+        </div>
+      </nav>
+      <div class="sidebar-user" id="sidebarUser"></div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" aria-label="Buka Menu Sidebar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <div>
+            <h1 class="page-title" id="topbarTitle">Detail Kamar</h1>
+            <p class="page-breadcrumb">KostManager / Penyewa / <a href="rooms.html"
+                style="color:inherit; text-decoration:none;">Cari Kamar</a> / <span>Detail</span></p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a href="rooms.html" class="btn btn-xs btn-outline"
+            style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Kembali
+          </a>
+          <div class="topbar-user" id="topbarUser"></div>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <div class="room-detail-container">
+          <!-- Kolom Kiri: Spesifikasi & Deskripsi -->
+          <div>
+            <!-- Visual Banner -->
+            <div class="room-banner type-standard" id="roomBanner">
+              <div class="room-banner-num" id="bannerNum">Kamar A-101</div>
+              <div class="room-banner-type" id="bannerType">Standard · Lantai 1</div>
+            </div>
+
+            <!-- Rincian Spesifikasi -->
+            <div class="detail-card">
+              <div class="detail-title">
+                <span>Informasi Spesifikasi Kamar</span>
+                <span id="roomStatusBadge" class="badge badge-success">Tersedia</span>
+              </div>
+              <table class="info-table">
+                <tr>
+                  <td>Nomor Kamar</td>
+                  <td id="infoNumber">A-101</td>
+                </tr>
+                <tr>
+                  <td>Tipe Kamar</td>
+                  <td id="infoType">Standard</td>
+                </tr>
+                <tr>
+                  <td>Posisi Lantai</td>
+                  <td id="infoFloor">Lantai 1</td>
+                </tr>
+                <tr>
+                  <td>Ukuran Luas</td>
+                  <td id="infoSize">3×4 m²</td>
+                </tr>
+                <tr>
+                  <td>Kapasitas Penghuni</td>
+                  <td id="infoMax">1 Orang</td>
+                </tr>
+                <tr>
+                  <td>Biaya Sewa Bulanan</td>
+                  <td id="infoPriceTable" style="color:#2563eb;">Rp 1.500.000 / bulan</td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Fasilitas Lengkap -->
+            <div class="detail-card">
+              <div class="detail-title">Fasilitas Kamar Lengkap</div>
+              <div class="facilities-grid" id="facilitiesGrid">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+
+            <!-- Deskripsi -->
+            <div class="detail-card">
+              <div class="detail-title">Deskripsi Kamar</div>
+              <p id="roomDesc" style="font-size:0.875rem; color:#475569; line-height:1.7;">
+                Kamar nyaman dan bersih siap dihuni.
+              </p>
+            </div>
+
+            <!-- Peraturan Kost -->
+            <div class="detail-card">
+              <div class="detail-title">Peraturan & Ketentuan Kamar</div>
+              <ul class="rules-list">
+                <li>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span><strong>Jam Malam:</strong> Pintu gerbang dikunci pukul 23.30 WIB untuk keamanan bersama.</span>
+                </li>
+                <li>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  <span><strong>Kunjungan Tamu:</strong> Tamu lawan jenis tidak diperkenankan menginap di dalam kamar.
+                    Tamu berkunjung maksimal pukul 21.00 WIB.</span>
+                </li>
+                <li>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                    <line x1="1" y1="10" x2="23" y2="10" />
+                  </svg>
+                  <span><strong>Uang Jaminan (Deposit):</strong> Wajib dibayarkan saat check-in awal dan akan
+                    dikembalikan 100% saat masa sewa selesai setelah inspeksi kamar.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Sticky Booking Card -->
+          <div>
+            <div class="booking-sidebar-card">
+              <div class="price-main" id="sidebarPrice">Rp 1.500.000</div>
+              <div class="price-sub">Harga sewa per bulan</div>
+
+              <div style="margin-bottom:14px;" id="sidebarStatusContainer">
+                <span class="badge badge-success" id="sidebarBadge">Tersedia</span>
+              </div>
+
+              <div id="bookingInteractiveForm">
+                <div style="font-size:0.8125rem; font-weight:600; color:#0f172a; margin-bottom:6px;">Tanggal Mulai Masuk
+                </div>
+                <input type="date" class="form-control" id="startDate" onchange="updateBreakdown()"
+                  style="width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.875rem; margin-bottom:14px;" />
+
+                <div style="font-size:0.8125rem; font-weight:600; color:#0f172a; margin-bottom:6px;">Pilih Durasi Sewa
+                </div>
+                <div class="duration-tabs">
+                  <button type="button" class="duration-tab active" data-months="1" onclick="selectDuration(1)">1
+                    Bln</button>
+                  <button type="button" class="duration-tab" data-months="3" onclick="selectDuration(3)">3 Bln</button>
+                  <button type="button" class="duration-tab" data-months="6" onclick="selectDuration(6)">6 Bln</button>
+                  <button type="button" class="duration-tab" data-months="12" onclick="selectDuration(12)">12
+                    Bln</button>
+                </div>
+
+                <!-- Rincian Biaya -->
+                <div class="breakdown-box">
+                  <div class="breakdown-item">
+                    <span id="labelSewa">Sewa 1 Bulan:</span>
+                    <span id="valSewa">Rp 1.500.000</span>
+                  </div>
+                  <div class="breakdown-item">
+                    <span>Deposit Jaminan:</span>
+                    <span id="valDeposit">Rp 500.000</span>
+                  </div>
+                  <div class="breakdown-item">
+                    <span>Biaya Layanan:</span>
+                    <span style="color:#16a34a; font-weight:600;">GRATIS</span>
+                  </div>
+                  <div class="breakdown-total">
+                    <span>Total Pembayaran</span>
+                    <span id="valTotal" style="color:#1e3a5f;">Rp 2.000.000</span>
+                  </div>
+                </div>
+
+                <button class="btn-booking-now" id="btnBookingNow" onclick="handleBookingProcess()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
+                  Booking & Bayar Sekarang
+                </button>
+              </div>
+
+              <!-- Pesan jika kamar tidak tersedia -->
+              <div id="msgUnavailable"
+                style="display:none; padding:16px; background:#fef2f2; border:1px solid #fee2e2; border-radius:8px; text-align:center; font-size:0.8125rem; color:#dc2626; font-weight:600;">
+                Kamar ini saat ini sedang terisi atau dalam renovasi sehingga tidak dapat dibooking.
+              </div>
+
+              <a href="https://wa.me/6281234567890?text=Halo%20Pengelola%20Kost,%20saya%20ingin%20menanyakan%20informasi%20kamar."
+                target="_blank" rel="noopener" class="btn-wa-contact">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                Chat Tanya via WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/utils.js"></script>
+  <script>
+    const currentUser = KostAuth.requireAuth('user');
+    let currentRoom = null;
+    let selectedMonths = 1;
+
+    // Init user session layout
+    if (currentUser) {
+      const initials = currentUser.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Penyewa</div>
+      </div>
+      <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="border-color:#fca5a5; color:#dc2626; cursor:pointer;" title="Keluar dari akun">Keluar</button>
+    `;
+      document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Login sebagai: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+    }
+
+    // Load Room Data
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('id') || 'room-001';
+
+    function initRoomDetail() {
+      const rooms = KostDB.getRooms();
+      currentRoom = rooms.find(r => r.id === roomId) || rooms[0];
+
+      if (!currentRoom) {
+        alert('Data kamar tidak ditemukan.');
+        window.location.href = 'rooms.html';
+        return;
+      }
+
+      // Topbar & Banner
+      document.getElementById('topbarTitle').innerText = `Detail Kamar ${currentRoom.number}`;
+      document.getElementById('bannerNum').innerText = `Kamar ${currentRoom.number}`;
+      document.getElementById('bannerType').innerText = `${currentRoom.type} · Lantai ${currentRoom.floor}`;
+
+      const banner = document.getElementById('roomBanner');
+      banner.className = 'room-banner type-' + (currentRoom.type ? currentRoom.type.toLowerCase() : 'standard');
+
+      // Info Table
+      document.getElementById('infoNumber').innerText = currentRoom.number;
+      document.getElementById('infoType').innerText = currentRoom.type;
+      document.getElementById('infoFloor').innerText = `Lantai ${currentRoom.floor}`;
+      document.getElementById('infoSize').innerText = currentRoom.size || '3×4 m²';
+      document.getElementById('infoMax').innerText = `${currentRoom.maxOccupants || 1} Orang`;
+      document.getElementById('infoPriceTable').innerText = KostUtils.formatRupiah(currentRoom.price) + ' / bulan';
+
+      // Status Badges
+      const isAvail = currentRoom.status === 'available';
+      const statusText = isAvail ? 'Tersedia' : (currentRoom.status === 'occupied' ? 'Terisi' : 'Dipesan');
+      const badgeClass = isAvail ? 'badge badge-success' : (currentRoom.status === 'occupied' ? 'badge badge-danger' : 'badge badge-warning');
+
+      const b1 = document.getElementById('roomStatusBadge');
+      b1.className = badgeClass;
+      b1.innerText = statusText;
+
+      const b2 = document.getElementById('sidebarBadge');
+      b2.className = badgeClass;
+      b2.innerText = statusText;
+
+      // Price
+      document.getElementById('sidebarPrice').innerText = KostUtils.formatRupiah(currentRoom.price);
+
+      // Facilities
+      const facGrid = document.getElementById('facilitiesGrid');
+      const facs = currentRoom.facilities || ['Kasur', 'Lemari', 'WiFi', 'Kamar Mandi Dalam'];
+      facGrid.innerHTML = facs.map(f => `
+      <div class="fac-chip">
+        <div class="fac-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span>${f}</span>
+      </div>
+    `).join('');
+
+      // Description
+      document.getElementById('roomDesc').innerText = currentRoom.description ||
+        `Kamar ${currentRoom.number} bertipe ${currentRoom.type} memberikan kenyamanan tinggal terbaik di Lantai ${currentRoom.floor}. Kamar dirawat secara berkala, bersih, memiliki sirkulasi udara segar, dan terletak di kawasan hunian yang tenang dan aman.`;
+
+      // Date & Availability Form
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById('startDate');
+      dateInput.value = today;
+      dateInput.min = today;
+
+      if (!isAvail) {
+        document.getElementById('bookingInteractiveForm').style.display = 'none';
+        document.getElementById('msgUnavailable').style.display = 'block';
+      } else {
+        document.getElementById('bookingInteractiveForm').style.display = 'block';
+        document.getElementById('msgUnavailable').style.display = 'none';
+        updateBreakdown();
+      }
+    }
+
+    function selectDuration(months) {
+      selectedMonths = months;
+      document.querySelectorAll('.duration-tab').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.months) === months);
+      });
+      updateBreakdown();
+    }
+
+    function updateBreakdown() {
+      if (!currentRoom) return;
+      const price = currentRoom.price || 1500000;
+      const sewa = price * selectedMonths;
+      const deposit = price >= 2000000 ? 1000000 : 500000;
+      const total = sewa + deposit;
+
+      document.getElementById('labelSewa').innerText = `Sewa ${selectedMonths} Bulan:`;
+      document.getElementById('valSewa').innerText = KostUtils.formatRupiah(sewa);
+      document.getElementById('valDeposit').innerText = KostUtils.formatRupiah(deposit);
+      document.getElementById('valTotal').innerText = KostUtils.formatRupiah(total);
+    }
+
+    function handleBookingProcess() {
+      if (!currentRoom || currentRoom.status !== 'available') return;
+
+      const startVal = document.getElementById('startDate').value;
+      if (!startVal) {
+        KostUtils.showToast('Silakan tentukan tanggal mulai sewa', 'warning');
+        return;
+      }
+
+      const startDate = new Date(startVal);
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + selectedMonths);
+
+      const price = currentRoom.price || 1500000;
+      const depositAmount = price >= 2000000 ? 1000000 : 500000;
+      const grandTotal = (price * selectedMonths) + depositAmount;
+
+      // Buat booking record
+      const booking = KostDB.createBooking({
+        user_id: currentUser.id,
+        user_name: currentUser.name,
+        room_id: currentRoom.id,
+        room_number: currentRoom.number,
+        start_date: startVal,
+        end_date: endDate.toISOString().split('T')[0],
+        duration_months: selectedMonths,
+        status: 'pending',
+        payment_status: 'unpaid',
+        total_amount: grandTotal,
+        total_price: price * selectedMonths,
+        deposit: depositAmount
+      });
+
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + 1);
+
+      // Buat payment record
+      const payment = KostDB.createPayment({
+        booking_id: booking.id,
+        user_id: currentUser.id,
+        user_name: currentUser.name,
+        room_number: currentRoom.number,
+        type: 'rent',
+        amount: grandTotal,
+        status: 'pending',
+        due_date: dueDate.toISOString().split('T')[0],
+        month: startVal.substring(0, 7)
+      });
+
+      // Tandai kamar reserved
+      KostDB.updateRoom(currentRoom.id, { status: 'reserved' });
+
+      KostDB.createNotification({
+        user_id: 'admin',
+        message: `Booking baru dari ${currentUser.name} untuk kamar ${currentRoom.number}`,
+        type: 'info',
+        read: false
+      });
+
+      KostDB.createNotification({
+        user_id: currentUser.id,
+        message: `Permohonan booking kamar ${currentRoom.number} berhasil dibuat. Silakan selesaikan pembayaran.`,
+        type: 'success',
+        read: false
+      });
+
+      KostUtils.showToast('Booking berhasil dibuat! Mengalihkan ke pembayaran...', 'success');
+      setTimeout(() => {
+        window.location.href = `../payment/checkout.html?booking_id=${booking.id}&payment_id=${payment.id}`;
+      }, 1000);
+    }
+
+    initRoomDetail();
+  </script>
+</body>
+
+</html>

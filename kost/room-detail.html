@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Kamar — KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; }
+
+    .page-hero {
+      background: #1e3a5f;
+      height: 160px;
+      display: flex; align-items: center;
+      padding: 0 48px;
+    }
+    .page-hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; }
+    .page-hero-title { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: rgba(255,255,255,0.65); }
+    .breadcrumb a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+
+    .detail-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 48px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    /* Left column */
+    .detail-left {}
+
+    .room-preview {
+      height: 280px;
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 24px;
+    }
+    .room-preview.type-standard { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
+    .room-preview.type-deluxe { background: linear-gradient(135deg, #15803d, #22c55e); }
+    .room-preview.type-premium { background: linear-gradient(135deg, #6d28d9, #a78bfa); }
+    .room-preview-num {
+      font-size: 2rem; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: -0.02em;
+    }
+    .room-preview-type {
+      font-size: 0.9375rem; font-weight: 500; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+
+    .detail-section { margin-bottom: 24px; }
+    .detail-section-title {
+      font-size: 1rem; font-weight: 600; color: #0f172a;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .info-table { width: 100%; border-collapse: collapse; }
+    .info-table tr { border-bottom: 1px solid #f1f5f9; }
+    .info-table tr:last-child { border-bottom: none; }
+    .info-table td { padding: 10px 0; font-size: 0.875rem; vertical-align: top; }
+    .info-table td:first-child { color: #64748b; width: 150px; font-weight: 500; }
+    .info-table td:last-child { color: #0f172a; font-weight: 500; }
+
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 10px; border-radius: 4px;
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .badge-available { background: #dcfce7; color: #15803d; }
+    .badge-occupied { background: #f1f5f9; color: #64748b; }
+    .badge-reserved { background: #fef9c3; color: #a16207; }
+    .badge-maintenance { background: #fee2e2; color: #dc2626; }
+
+    .facility-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .facility-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: #f8fafc; border: 1.5px solid #e2e8f0;
+      border-radius: 7px; padding: 10px 12px;
+      font-size: 0.8125rem; color: #374151; font-weight: 500;
+    }
+    .facility-chip-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: #e2e8f0;
+      display: flex; align-items: center; justify-content: center;
+      color: #64748b; flex-shrink: 0;
+    }
+
+    .desc-text { font-size: 0.875rem; color: #374151; line-height: 1.7; }
+
+    .rules-list { list-style: none; }
+    .rules-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid #f1f5f9;
+      font-size: 0.875rem; color: #374151;
+    }
+    .rules-list li:last-child { border-bottom: none; }
+    .rules-list li svg { color: #64748b; flex-shrink: 0; margin-top: 1px; }
+
+    /* Right sticky card */
+    .booking-card {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      position: sticky;
+      top: 24px;
+    }
+    .booking-price-main { font-size: 1.75rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; }
+    .booking-price-sub { font-size: 0.875rem; color: #64748b; margin-bottom: 10px; }
+    .booking-divider { height: 1px; background: #e2e8f0; margin: 16px 0; }
+
+    .duration-label { font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 10px; }
+    .duration-tabs { display: grid; grid-template-columns: repeat(4, 1fr); border: 1.5px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 18px; }
+    .duration-tab {
+      text-align: center; padding: 8px 4px;
+      font-size: 0.75rem; font-weight: 600; color: #64748b;
+      cursor: pointer; background: #fff; border: none;
+      font-family: 'Inter', sans-serif; border-right: 1px solid #e2e8f0;
+      transition: background 0.1s, color 0.1s;
+    }
+    .duration-tab:last-child { border-right: none; }
+    .duration-tab.active { background: #1e3a5f; color: #fff; }
+    .duration-tab:hover:not(.active) { background: #f8fafc; }
+
+    .breakdown { background: #f8fafc; border-radius: 7px; padding: 14px; margin-bottom: 18px; }
+    .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.8125rem; }
+    .breakdown-row:last-child { padding-top: 10px; border-top: 1px solid #e2e8f0; margin-top: 5px; font-weight: 700; font-size: 0.9375rem; }
+    .breakdown-label { color: #64748b; }
+    .breakdown-value { color: #0f172a; font-weight: 500; }
+    .breakdown-row:last-child .breakdown-label { color: #0f172a; }
+    .breakdown-row:last-child .breakdown-value { color: #1e3a5f; }
+
+    .btn-book {
+      width: 100%; height: 46px; border-radius: 8px;
+      font-size: 0.9375rem; font-weight: 600; font-family: 'Inter', sans-serif;
+      border: none; cursor: pointer; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .btn-book-primary { background: #1e3a5f; color: #fff; }
+    .btn-book-primary:hover { background: #162d4a; }
+    .btn-book-disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+
+    .btn-wa {
+      width: 100%; height: 42px; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 600; font-family: 'Inter', sans-serif;
+      border: 1.5px solid #16a34a; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      color: #16a34a; background: none; text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-wa:hover { background: #f0fdf4; }
+
+    .admin-info-box {
+      background: #eff6ff; border: 1px solid #bfdbfe;
+      border-radius: 7px; padding: 12px 14px;
+      font-size: 0.8125rem; color: #1e40af;
+      margin-bottom: 10px; display: none;
+    }
+
+    @media (max-width: 1024px) { .detail-layout { padding: 24px; } }
+    @media (max-width: 768px) {
+      .detail-layout { grid-template-columns: 1fr; padding: 20px 16px; }
+      .booking-card { position: static; }
+      .page-hero { padding: 0 20px; height: 130px; }
+      .facility-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo">
+      <div class="navbar-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="navbar-logo-text">KostManager</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="about.html">Tentang</a></li>
+      <li><a href="rooms.html" class="active">Kamar</a></li>
+      <li><a href="facilities.html">Fasilitas</a></li>
+      <li><a href="rules.html">Peraturan</a></li>
+      <li><a href="contact.html">Kontak</a></li>
+    </ul>
+    <div class="navbar-actions" id="navActions">
+      <a href="login.html" class="btn-nav-outline">Masuk</a>
+      <a href="register.html" class="btn-nav-primary">Daftar</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1 class="page-hero-title" id="heroTitle">Detail Kamar</h1>
+    <div class="breadcrumb">
+      <a href="index.html">Beranda</a>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <a href="rooms.html">Kamar</a>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span id="breadcrumbRoom">Detail</span>
+    </div>
+  </div>
+</div>
+
+<div class="detail-layout">
+  <!-- Left -->
+  <div class="detail-left">
+    <div class="room-preview" id="roomPreview">
+      <span class="room-preview-num" id="previewNum">A-101</span>
+      <span class="room-preview-type" id="previewType">Standard</span>
+    </div>
+
+    <!-- Info table -->
+    <div class="detail-section">
+      <div class="detail-section-title">Informasi Kamar</div>
+      <table class="info-table">
+        <tbody>
+          <tr><td>Nomor Kamar</td><td id="infoNumber">—</td></tr>
+          <tr><td>Tipe</td><td id="infoType">—</td></tr>
+          <tr><td>Lantai</td><td id="infoFloor">—</td></tr>
+          <tr><td>Ukuran</td><td id="infoSize">—</td></tr>
+          <tr><td>Maks. Penghuni</td><td id="infoMax">—</td></tr>
+          <tr><td>Status</td><td id="infoStatus">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Facilities -->
+    <div class="detail-section">
+      <div class="detail-section-title">Fasilitas Kamar</div>
+      <div class="facility-grid" id="facilityGrid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="detail-section">
+      <div class="detail-section-title">Deskripsi Kamar</div>
+      <p class="desc-text" id="roomDesc">—</p>
+    </div>
+
+    <!-- Rules -->
+    <div class="detail-section">
+      <div class="detail-section-title">Peraturan Kamar</div>
+      <ul class="rules-list">
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Jam malam pukul 23.00 WIB. Pintu utama dikunci pukul 23.30 WIB.
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Tamu dilarang menginap. Berkunjung maksimal pukul 21.00 WIB.
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Jaga kebersihan kamar dan area bersama setiap saat.
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Bayar sewa sebelum tanggal 5 setiap bulan. Keterlambatan dikenakan denda.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Right: Booking Card -->
+  <div class="booking-card">
+    <div class="booking-price-main" id="cardPrice">Rp 0</div>
+    <div class="booking-price-sub">per bulan</div>
+    <div id="cardStatus"></div>
+
+    <div class="booking-divider"></div>
+
+    <div class="duration-label">Durasi Sewa</div>
+    <div class="duration-tabs">
+      <button class="duration-tab active" data-months="1">1 Bulan</button>
+      <button class="duration-tab" data-months="3">3 Bulan</button>
+      <button class="duration-tab" data-months="6">6 Bulan</button>
+      <button class="duration-tab" data-months="12">12 Bulan</button>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-row">
+        <span class="breakdown-label" id="breakLabel">Sewa 1 Bulan</span>
+        <span class="breakdown-value" id="breakSewa">Rp 0</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Deposit (1 bln)</span>
+        <span class="breakdown-value" id="breakDeposit">Rp 0</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">Total Bayar</span>
+        <span class="breakdown-value" id="breakTotal">Rp 0</span>
+      </div>
+    </div>
+
+    <div class="admin-info-box" id="adminInfoBox">
+      Anda login sebagai Admin/Owner. Gunakan dashboard untuk memproses booking.
+    </div>
+
+    <button class="btn-book" id="btnBook">
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Booking Sekarang
+    </button>
+
+    <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20menanyakan%20kamar%20kost." target="_blank" rel="noopener" class="btn-wa">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Hubungi via WhatsApp
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <h4>KostManager</h4>
+      <p>Sistem manajemen kost terpadu untuk penyewa dan pengelola.</p>
+    </div>
+    <div>
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="about.html">Tentang Kost</a></li>
+        <li><a href="rooms.html">Daftar Kamar</a></li>
+        <li><a href="facilities.html">Fasilitas</a></li>
+        <li><a href="rules.html">Peraturan</a></li>
+        <li><a href="contact.html">Kontak</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <p>Jl. Kemakmuran No. 15, Bandung 40161</p>
+      <p>Telp: (022) 7812345 | WA: 0812-3456-7890</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 Kost Putra Bahagia. Semua hak dilindungi.</p>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/utils.js"></script>
+<script>
+  (function() {
+    const user = KostAuth.getCurrentUser();
+    if (user) {
+      document.getElementById('navActions').innerHTML = `
+        <span style="font-size:0.875rem;font-weight:500;color:#0f172a;">${user.name}</span>
+        <a href="${KostAuth.getDashboardUrl(user.role)}" class="btn-nav-primary">Dashboard</a>
+      `;
+    }
+  })();
+
+  // Load room
+  const params = new URLSearchParams(window.location.search);
+  const roomId = params.get('id') || 'room-001';
+  let room = null;
+
+  try {
+    const rooms = JSON.parse(localStorage.getItem('kost_rooms')) || [];
+    room = rooms.find(r => r.id === roomId) || rooms[0];
+  } catch(e) {}
+
+  // Fallback data
+  if (!room) {
+    room = {
+      id: 'room-001',
+      number: 'A-101',
+      type: 'Standard',
+      floor: 1,
+      size: '3x4 m²',
+      maxOccupants: 1,
+      status: 'available',
+      price: 1200000,
+      facilities: ['Kasur', 'Lemari', 'Meja Belajar', 'Kipas Angin', 'Kamar Mandi Dalam'],
+      description: 'Kamar Standard yang nyaman dengan pencahayaan alami yang baik. Cocok untuk mahasiswa atau pekerja yang membutuhkan tempat tinggal yang bersih dan terjangkau. Kamar dilengkapi dengan furnitur dasar dan akses WiFi gratis.'
+    };
+  }
+
+  // Facility icons map
+  const facIconMap = {
+    'AC': '<path d="M12 2v20M2 12h20M12 2l4 4-4 4M12 22l-4-4 4-4"/>',
+    'WiFi': '<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>',
+    'default': '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>'
+  };
+
+  function getFacIcon(name) {
+    const n = name ? name.toLowerCase() : '';
+    if (n.includes('ac')) return '<path d="M12 2v20M2 12h20M12 2l4 4-4 4M12 22l-4-4 4-4"/>';
+    if (n.includes('wifi')) return '<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>';
+    if (n.includes('water') || n.includes('heater')) return '<path d="M12 2v7a2 2 0 0 0 2 2h7"/><path d="M22 13h-7a2 2 0 0 1-2-2V4"/>';
+    if (n.includes('tv') || n.includes('televisi')) return '<rect x="2" y="7" width="20" height="13" rx="2"/><polyline points="17 2 12 7 7 2"/>';
+    if (n.includes('kulkas') || n.includes('fridge')) return '<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/>';
+    if (n.includes('kasur') || n.includes('bed')) return '<path d="M2 4v16M22 4v16M2 8h20M2 16h20"/>';
+    if (n.includes('lemari') || n.includes('wardrobe')) return '<rect x="2" y="2" width="20" height="20" rx="2"/><line x1="12" y1="2" x2="12" y2="22"/>';
+    if (n.includes('meja') || n.includes('desk')) return '<rect x="3" y="10" width="18" height="2"/><path d="M5 12v7M19 12v7M5 10V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/>';
+    if (n.includes('kamar mandi') || n.includes('bathroom')) return '<path d="M4 12h16M4 6h16M4 18h16"/>';
+    return '<circle cx="12" cy="12" r="3"/>';
+  }
+
+  function formatRp(val) {
+    return 'Rp ' + Number(val).toLocaleString('id-ID');
+  }
+
+  function getStatusBadgeHtml(status) {
+    const map = {
+      'available': '<span class="badge badge-available">Tersedia</span>',
+      'occupied': '<span class="badge badge-occupied">Ditempati</span>',
+      'reserved': '<span class="badge badge-reserved">Dipesan</span>',
+      'maintenance': '<span class="badge badge-maintenance">Perbaikan</span>',
+    };
+    return map[status] || '<span class="badge badge-occupied">Tidak Aktif</span>';
+  }
+
+  // Populate page
+  document.getElementById('heroTitle').textContent = 'Kamar ' + (room.number || room.id);
+  document.getElementById('breadcrumbRoom').textContent = 'Kamar ' + (room.number || room.id);
+
+  const typeClass = {
+    'Standard': 'type-standard',
+    'Deluxe': 'type-deluxe',
+    'Premium': 'type-premium'
+  }[room.type] || 'type-standard';
+
+  document.getElementById('roomPreview').className = 'room-preview ' + typeClass;
+  document.getElementById('previewNum').textContent = room.number || room.id;
+  document.getElementById('previewType').textContent = room.type || 'Standard';
+
+  document.getElementById('infoNumber').textContent = room.number || room.id;
+  document.getElementById('infoType').innerHTML = `<span class="badge" style="background:${room.type==='Deluxe'?'#dcfce7':room.type==='Premium'?'#ede9fe':'#dbeafe'};color:${room.type==='Deluxe'?'#15803d':room.type==='Premium'?'#6d28d9':'#1d4ed8'}">${room.type||'Standard'}</span>`;
+  document.getElementById('infoFloor').textContent = room.floor ? 'Lantai ' + room.floor : 'Lantai 1';
+  document.getElementById('infoSize').textContent = room.size || '3×4 m²';
+  document.getElementById('infoMax').textContent = (room.maxOccupants || 1) + ' orang';
+  document.getElementById('infoStatus').innerHTML = getStatusBadgeHtml(room.status);
+
+  document.getElementById('cardPrice').textContent = formatRp(room.price || 0);
+  document.getElementById('cardStatus').innerHTML = getStatusBadgeHtml(room.status);
+
+  // Facilities
+  const facs = Array.isArray(room.facilities) ? room.facilities : [];
+  document.getElementById('facilityGrid').innerHTML = facs.map(f => `
+    <div class="facility-chip">
+      <div class="facility-chip-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${getFacIcon(f)}</svg>
+      </div>
+      ${f}
+    </div>
+  `).join('') || '<p style="color:#94a3b8;font-size:0.875rem;">Tidak ada fasilitas terdaftar.</p>';
+
+  document.getElementById('roomDesc').textContent = room.description || 'Kamar yang nyaman dan bersih, siap huni.';
+
+  // Duration & breakdown
+  let selectedMonths = 1;
+  const price = room.price || 0;
+
+  function updateBreakdown() {
+    const sewa = price * selectedMonths;
+    const deposit = price;
+    const total = sewa + deposit;
+    document.getElementById('breakLabel').textContent = 'Sewa ' + selectedMonths + ' Bulan';
+    document.getElementById('breakSewa').textContent = formatRp(sewa);
+    document.getElementById('breakDeposit').textContent = formatRp(deposit);
+    document.getElementById('breakTotal').textContent = formatRp(total);
+  }
+
+  document.querySelectorAll('.duration-tab').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.duration-tab').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      selectedMonths = parseInt(this.dataset.months);
+      updateBreakdown();
+    });
+  });
+
+  updateBreakdown();
+
+  // Book button logic
+  const btnBook = document.getElementById('btnBook');
+  const adminBox = document.getElementById('adminInfoBox');
+  const isAvailable = room.status === 'available';
+
+  if (!isAvailable) {
+    btnBook.className = 'btn-book btn-book-disabled';
+    btnBook.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Kamar Tidak Tersedia';
+    btnBook.disabled = true;
+  } else {
+    btnBook.className = 'btn-book btn-book-primary';
+    btnBook.addEventListener('click', function() {
+      const user = KostAuth.getCurrentUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      if (user.role === 'admin' || user.role === 'owner') {
+        adminBox.style.display = 'block';
+        return;
+      }
+      // user role
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() + 1);
+      const startStr = startDate.toISOString().split('T')[0];
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + selectedMonths);
+      const endStr = endDate.toISOString().split('T')[0];
+
+      const depositAmount = (room.price || 0) >= 2000000 ? 1000000 : 500000;
+      const grandTotal = ((room.price || 0) * selectedMonths) + depositAmount;
+
+      const newBooking = KostDB.createBooking({
+        user_id: user.id,
+        user_name: user.name,
+        room_id: room.id,
+        room_number: room.number || room.id,
+        start_date: startStr,
+        end_date: endStr,
+        duration_months: selectedMonths,
+        status: 'pending',
+        payment_status: 'unpaid',
+        total_amount: grandTotal,
+        total_price: (room.price || 0) * selectedMonths,
+        deposit: depositAmount
+      });
+
+      const newPayment = KostDB.createPayment({
+        booking_id: newBooking.id,
+        user_id: user.id,
+        user_name: user.name,
+        room_number: room.number || room.id,
+        type: 'rent',
+        amount: grandTotal,
+        status: 'pending',
+        due_date: startStr,
+        month: startStr.substring(0, 7)
+      });
+
+      KostDB.updateRoom(room.id, { status: 'reserved' });
+
+      KostDB.createNotification({
+        user_id: 'admin',
+        message: `Booking baru dari ${user.name} untuk kamar ${room.number || room.id}`,
+        type: 'info',
+        read: false
+      });
+
+      KostDB.createNotification({
+        user_id: user.id,
+        message: `Booking kamar ${room.number || room.id} berhasil dibuat. Silakan selesaikan pembayaran.`,
+        type: 'success',
+        read: false
+      });
+
+      window.location.href = `payment/checkout.html?booking_id=${newBooking.id}&payment_id=${newPayment.id}`;
+    });
+  }
+  // Update navbar for logged-in users
+  (function() {
+    if (window.KostAuth) {
+      const user = KostAuth.getCurrentUser();
+      if (user) {
+        const actions = document.getElementById('navActions');
+        if (actions) {
+          actions.innerHTML = `
+            <span style="font-size:0.875rem;font-weight:600;color:#0f172a;">${user.name}</span>
+            <a href="${KostAuth.getDashboardUrl(user.role)}" class="btn-nav-primary">Dashboard</a>
+            <button onclick="KostAuth.logout(true)" class="btn-nav-outline" style="border-color:#fca5a5; color:#dc2626; cursor:pointer;" title="Keluar dari akun">Keluar</button>
+          `;
+        }
+      }
+    }
+  })();
+</script>

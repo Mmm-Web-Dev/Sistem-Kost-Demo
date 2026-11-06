@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengaturan Bisnis — Pemilik Kost</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <style>
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .s-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .s-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      box-sizing: border-box;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .settings-grid { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout" id="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-text">KostManager</span>
+      <span class="logo-sub">Owner Executive</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-label">Monitoring Bisnis</span>
+        <a href="dashboard.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Executive Dashboard
+        </a>
+        <a href="statistics.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Statistik Kost
+        </a>
+        <a href="rooms.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Data Kamar & ROI
+        </a>
+        <a href="tenants.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Data Penghuni
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">Keuangan & Audit</span>
+        <a href="income.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Laporan Pendapatan
+        </a>
+        <a href="payments.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Laporan Pembayaran
+        </a>
+        <a href="occupancy.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Laporan Okupansi
+        </a>
+        <a href="activity.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Aktivitas Admin
+        </a>
+        <a href="settings.html" class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Pengaturan Bisnis
+        </a>
+        <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Keluar dari Akun
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">Pengaturan Bisnis & Rekening Pemilik</h1>
+          <p class="page-breadcrumb">KostManager / Pemilik / <span>Pengaturan Bisnis</span></p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user" id="topbarUser"></div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div class="settings-grid">
+        <!-- Rekening Pencairan Dividen / Hasil Sewa -->
+        <div>
+          <div class="s-card">
+            <div class="s-card-title">Rekening Pencairan Dividen Laba Sewa</div>
+            <form id="ownerBankForm" onsubmit="handleBankSave(event)">
+              <div class="form-group">
+                <label for="bankName">Nama Bank *</label>
+                <select id="bankName" class="form-control">
+                  <option value="BCA">Bank Central Asia (BCA)</option>
+                  <option value="Mandiri">Bank Mandiri</option>
+                  <option value="BNI">Bank Negara Indonesia (BNI)</option>
+                  <option value="BRI">Bank Rakyat Indonesia (BRI)</option>
+                </select>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="bankAccNum">Nomor Rekening Tujuan *</label>
+                  <input type="text" id="bankAccNum" class="form-control" value="8801928371" required>
+                </div>
+                <div class="form-group">
+                  <label for="bankAccName">Atas Nama Pemilik Rekening *</label>
+                  <input type="text" id="bankAccName" class="form-control" value="Hendra Wijaya" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="payoutCycle">Jadwal Otomatis Pencairan Laba</label>
+                <select id="payoutCycle" class="form-control">
+                  <option value="monthly">Setiap Tanggal 10 Tiap Bulan (Bulanan)</option>
+                  <option value="biweekly">Setiap 2 Minggu (Bi-Weekly)</option>
+                  <option value="manual">Manual Berdasarkan Permintaan</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="padding:10px 24px; font-weight:600;">
+                Simpan Konfigurasi Rekening
+              </button>
+            </form>
+          </div>
+
+          <div class="s-card">
+            <div class="s-card-title">Otorisasi Kebijakan Harga Sewa</div>
+            <p style="font-size:0.8125rem; color:#64748b; margin-bottom:16px;">
+              Tentukan batasan diskon perpanjangan jangka panjang yang dapat diberikan oleh sistem kepada penyewa loyal.
+            </p>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label>Diskon Sewa 3 Bulan</label>
+                <input type="text" class="form-control" value="5%" readonly style="background:#f8fafc;">
+              </div>
+              <div class="form-group">
+                <label>Diskon Sewa 6 Bulan</label>
+                <input type="text" class="form-control" value="8%" readonly style="background:#f8fafc;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profil Pemilik -->
+        <div>
+          <div class="s-card">
+            <div class="s-card-title">Profil Pemilik Properti</div>
+            <div style="font-size:0.875rem; color:#0f172a; line-height:1.7;">
+              <div><strong>Nama Pemilik:</strong> Hendra Wijaya</div>
+              <div><strong>Email Bisnis:</strong> owner@kost.com</div>
+              <div><strong>Nomor Telepon:</strong> 0812-3456-7891</div>
+              <div style="margin-top:14px; padding-top:12px; border-top:1px solid #f1f5f9; font-size:0.8125rem; color:#64748b;">
+                Kepemilikan Sah Properti: <strong>Kost Putra Bahagia</strong> (10 Unit Kamar Terdaftar)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+  const currentUser = KostAuth.guard('owner');
+  if (currentUser) {
+    document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Pemilik Kost</div>
+      </div>
+      <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="margin-left:8px;">Keluar</button>
+    `;
+    document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Pemilik: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+  }
+
+  function handleBankSave(e) {
+    e.preventDefault();
+    const bank = document.getElementById('bankName').value;
+    const acc = document.getElementById('bankAccNum').value.trim();
+    const name = document.getElementById('bankAccName').value.trim();
+
+    KostDB.addLog(currentUser.id, currentUser.name, 'Ubah Rekening Pencairan', `Pemilik memperbarui rekening dividen: ${bank} ${acc} a.n ${name}`);
+    KostUtils.showToast('Data rekening pencairan dividen berhasil diperbarui!', 'success');
+  }
+</script>
+</body>
+</html>
+

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran & Tagihan — KostManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/dashboard.css"/>
+  <style>
+    .bill-hero {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .bill-amount-label {
+      font-size: 0.8125rem;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .bill-amount-val {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .bill-due-date {
+      font-size: 0.8125rem;
+      color: #b45309;
+      font-weight: 600;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .bills-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    .card-wrap {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 16px;
+    }
+    .bill-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .bill-row:last-child { border-bottom: none; }
+    .bill-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+    .bill-sub {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .bill-price {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: right;
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.8125rem;
+      color: #475569;
+    }
+    .info-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .bills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout" id="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <a href="../index.html" style="text-decoration:none"><span class="logo-text">KostManager</span></a>
+      <span class="logo-sub">Penyewa</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-label">Menu</span>
+        <a href="dashboard.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="rooms.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Cari Kamar
+        </a>
+        <a href="bookings.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Booking Saya
+        </a>
+        <a href="payments.html" class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Pembayaran
+        </a>
+        <a href="transactions.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Riwayat Transaksi
+        </a>
+        <a href="lease.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Masa Sewa
+        </a>
+        <a href="complaints.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Keluhan
+        </a>
+        <a href="profile.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profil
+        </a>
+        <a href="javascript:void(0)" onclick="KostAuth.logout(true)" class="nav-item nav-item-logout">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Keluar dari Akun
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-user" id="sidebarUser"></div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('layout').classList.toggle('sidebar-collapsed')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">Pembayaran & Tagihan</h1>
+          <p class="page-breadcrumb">KostManager / Penyewa / <span>Pembayaran</span></p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user" id="topbarUser"></div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <!-- Hero Box Tagihan Aktif -->
+      <div class="bill-hero" id="billHero">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="bills-grid">
+        <!-- Rincian Tagihan Belum Dibayar -->
+        <div>
+          <div class="card-wrap">
+            <div class="card-title">Daftar Tagihan Berjalan</div>
+            <div id="unpaidList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <div class="card-wrap">
+            <div class="card-title">Tagihan Telah Dilunasi (Bulan Sebelumnya)</div>
+            <div id="paidList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Panduan & Ketentuan -->
+        <div>
+          <div class="card-wrap">
+            <div class="card-title">Ketentuan Pembayaran</div>
+            <ul class="info-list">
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>Pembayaran sewa bulanan jatuh tempo setiap tanggal 1 hingga tanggal 5 setiap bulannya.</span>
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>Sistem mendukung verifikasi instan melalui QRIS, Virtual Account 4 bank besar, dan E-Wallet resmi.</span>
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>Kuitansi elektronik dan status sewa diperbarui secara realtime setelah proses transaksi sukses.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+  const currentUser = KostAuth.guard('user');
+  if (currentUser) {
+    document.getElementById('topbarUser').innerHTML = `
+      <div style="text-align:right; margin-right:8px;">
+        <div style="font-size:0.875rem; font-weight:600; color:#0f172a;">${KostUtils.escapeHtml(currentUser.name)}</div>
+        <div style="font-size:0.75rem; color:#64748b;">Penyewa</div>
+      </div>
+      <button onclick="KostAuth.logout(true)" class="btn btn-xs btn-secondary" style="margin-left:8px; border-color:#fca5a5; color:#dc2626; cursor:pointer;" title="Keluar dari akun">Keluar</button>
+    `;
+    document.getElementById('sidebarUser').innerHTML = `
+      <div style="padding:14px; border-top:1px solid #1e293b; font-size:0.8125rem; color:#94a3b8;">
+        Login sebagai: <strong style="color:#fff; display:block;">${KostUtils.escapeHtml(currentUser.name)}</strong>
+      </div>
+    `;
+  }
+
+  function renderPayments() {
+    const payments = KostDB.getPaymentsByUserId(currentUser.id);
+    const bookings = KostDB.getBookingsByUserId(currentUser.id);
+
+    const pendingPayments = payments.filter(p => p.status === 'pending');
+    const successPayments = payments.filter(p => p.status === 'success');
+
+    // Hero box
+    const heroEl = document.getElementById('billHero');
+    if (pendingPayments.length > 0) {
+      const topPending = pendingPayments[0];
+      heroEl.innerHTML = `
+        <div>
+          <div class="bill-amount-label">Total Tagihan Tertunggak / Menunggu Pembayaran</div>
+          <div class="bill-amount-val" style="color:#dc2626;">${KostUtils.formatRupiah(topPending.amount)}</div>
+          <div class="bill-due-date">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Jatuh Tempo: Segera diselesaikan
+          </div>
+        </div>
+        <div>
+          <a href="../payment/checkout.html?payment_id=${topPending.id}" class="btn btn-primary" style="padding:12px 24px; font-weight:700; text-decoration:none; display:inline-block;">
+            Bayar Tagihan Sekarang
+          </a>
+        </div>
+      `;
+    } else {
+      heroEl.innerHTML = `
+        <div>
+          <div class="bill-amount-label">Status Pembayaran Sewa Bulan Ini</div>
+          <div class="bill-amount-val" style="color:#16a34a;">Lunas / Tidak Ada Tagihan</div>
+          <div style="font-size:0.8125rem; color:#64748b; margin-top:4px;">Semua tagihan sewa berjalan telah terselesaikan dengan baik.</div>
+        </div>
+        <div>
+          <a href="transactions.html" class="btn btn-secondary" style="text-decoration:none;">Lihat Riwayat Transaksi</a>
+        </div>
+      `;
+    }
+
+    // Unpaid list
+    const unpaidEl = document.getElementById('unpaidList');
+    if (pendingPayments.length === 0) {
+      unpaidEl.innerHTML = `<div style="text-align:center; padding:24px; color:#94a3b8; font-size:0.875rem;">Tidak ada tagihan tertunggak saat ini.</div>`;
+    } else {
+      unpaidEl.innerHTML = pendingPayments.map(p => `
+        <div class="bill-row">
+          <div>
+            <div class="bill-name">Sewa Kamar ${p.room_number || '-'}</div>
+            <div class="bill-sub">Ref: ${p.id} &bull; Metode: ${(p.method || 'Online').toUpperCase()}</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="bill-price">${KostUtils.formatRupiah(p.amount)}</div>
+            <a href="../payment/checkout.html?payment_id=${p.id}" class="btn btn-xs btn-primary" style="margin-top:4px; text-decoration:none; display:inline-block;">Bayar</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Paid list
+    const paidEl = document.getElementById('paidList');
+    if (successPayments.length === 0) {
+      paidEl.innerHTML = `<div style="text-align:center; padding:24px; color:#94a3b8; font-size:0.875rem;">Belum ada riwayat pembayaran yang berhasil.</div>`;
+    } else {
+      paidEl.innerHTML = successPayments.slice(0, 5).map(p => `
+        <div class="bill-row">
+          <div>
+            <div class="bill-name">Pembayaran Sewa Kamar ${p.room_number || '-'}</div>
+            <div class="bill-sub">${KostUtils.formatDate(p.paid_at || p.created_at)} &bull; ${KostUtils.getStatusBadge('success', 'payment')}</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="bill-price" style="color:#16a34a;">${KostUtils.formatRupiah(p.amount)}</div>
+            <a href="../payment/status.html?trx_id=${p.id}&status=success" class="btn btn-xs btn-secondary" style="margin-top:4px; text-decoration:none; display:inline-block;">Kwitansi</a>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  renderPayments();
+</script>
+</body>
+</html>
+
